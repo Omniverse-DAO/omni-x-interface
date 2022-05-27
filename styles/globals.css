@@ -211,10 +211,11 @@ input:focus-visible {
 }
 
 .footer button img {
-  display: inline-block;
-  margin-right: 6px;
-  width: 20px;
-  height: auto;
+  display: inline-block !important;
+  position: relative !important;
+  margin-right: 6px !important;
+  width: 20px !important;
+  height: auto !important;
 }
 
 .swiper {

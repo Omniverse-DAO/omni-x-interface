@@ -3,6 +3,16 @@ import Head from 'next/head'
 import MainNav from '../components/MainNav'
 import Footer from '../components/Footer'
 import SwipSlider from '../components/SwipSlider'
+import Image from 'next/image'
+import ethereum_img from '../static/svgs/ethereum.svg'
+import avax_img from '../static/svgs/avax.svg'
+import arbitrum_img from '../static/svgs/arbitrum.svg'
+import binance_img from '../static/svgs/binance.svg'
+import optimism_img from '../static/svgs/optimism.svg'
+import polygon_img from '../static/svgs/polygon.svg'
+import fantom_img from '../static/svgs/fantom.svg'
+import omni_img from "../static/omni.png"
+import greg_img from "../static/greg.png"
 
 const Home: NextPage = () => {
   return (
@@ -25,20 +35,51 @@ const Home: NextPage = () => {
               NFTs from Any Network.
             </p>
             <div className="w-full flex flex-row pt-12 pb-12">
-              <img src='../static/svgs/ethereum.svg' className='w-6 md:w-auto'/>
-              <img src='../static/svgs/avax.svg' className='w-6 md:w-auto' />
-              <img src='../static/svgs/arbitrum.svg' className='w-6 md:w-auto' />
-              <img src='../static/svgs/binance.svg' className='w-6 md:w-auto' />
-              <img src='../static/svgs/optimism.svg' className='w-6 md:w-auto' />
-              <img src='../static/svgs/polygon.svg' className='w-6 md:w-auto' />
-              <img src='../static/svgs/fantom.svg' className='w-6 md:w-auto' />
+              <Image
+                src={ethereum_img}
+                className="w-6 md:w-auto"
+                alt="Ethereum"
+              />
+              <Image
+                src={avax_img}
+                className="w-6 md:w-auto"
+                alt="Avax"
+              />
+              <Image
+                src={arbitrum_img}
+                className="w-6 md:w-auto"
+                alt="Arbitrum"
+              />
+              <Image
+                src={binance_img}
+                className="w-6 md:w-auto"
+                alt="Binance"
+              />
+              <Image
+                src={optimism_img}
+                className="w-6 md:w-auto"
+                alt="Optimism"
+              />
+              <Image
+                src={polygon_img}
+                className="w-6 md:w-auto"
+                alt="Polygon"
+              />
+              <Image
+                src={fantom_img}
+                className="w-6 md:w-auto"
+                alt="Fantom"
+              />
             </div>
             <p className="m-0 text-justify text-2xl lg:text-left">
               OmniX is the first multichain NFT Marketplace powered by LayerZero              
             </p>
           </div>
           <div className="flex w-full flex-col items-center px-10 py-5 lg:w-2/6 lg:items-end">
-            <img src="../static/omni.png" className="w-48 sm:w-96 md:w-auto h-auto" />
+            <Image
+              src={omni_img}
+              className="w-48 sm:w-96 md:w-auto h-auto"
+            />
           </div>
         </div>
       </div>
@@ -62,7 +103,10 @@ const Home: NextPage = () => {
             <button className="focus:outline-none text-white font-semibold raleway bg-pink-600 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm p-2 md:px-5 md:py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-900 lg:ml-16 mr-auto">learn more</button>
           </div>
           <div className="flex m-auto flex-col items-center lg:w-3/6 px-10 xl:px-20 2xl:px-32 lg:items-end hidden md:block">
-            <img src="../static/greg.png" className="w-auto h-auto m-auto" />
+            <Image
+              src={greg_img}
+              className="w-auto h-auto m-auto" 
+            />
           </div>
         </div>
       </div>

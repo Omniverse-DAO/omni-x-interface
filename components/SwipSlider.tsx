@@ -1,5 +1,9 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation, Autoplay } from "swiper";
+import Image from "next/image";
+import ghosts_img from '../static/ghosts.png'
+import dinos_img from '../static/dinos.png'
+import bunnies_img from '../static/bunnies.png'
 
 // Import Swiper styles
 import "swiper/css";
@@ -31,13 +35,22 @@ export default function SwipSlider() {
       >
         <div className="px-20">
           <SwiperSlide>
-            <img src="../static/ghosts.png" alt="NFT1" />
+            <Image
+              src={ghosts_img}
+              alt="NFT1"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <img src="../static/dinos.png" alt="NFT2" />
+            <Image
+              src={dinos_img}
+              alt="NFT2"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <img src="../static/bunnies.png" alt="NFT3" />
+            <Image
+              src={bunnies_img}
+              alt="NFT3"
+            />
           </SwiperSlide>
         </div>
       </Swiper>
