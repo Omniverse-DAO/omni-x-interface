@@ -24,10 +24,10 @@ const MainNav = ({ setNetId, netId, addresses = [] }: MainNavProps) => {
     <div className='mainnavcorner h-[80px] abel z-10'>
       <div className='mainnav relative'>
         <div className='button-borders'>
-          <button className='primary-button' onClick={() => router.push('/')}>OMNIVERSE</button>
+          <button className='primary-button' onClick={() => router.push('/')}>HOME</button>
         </div>
         <div className='button-borders'>
-          <button className='primary-button' onClick={() => router.push('/greg')}>GREG</button>
+          <button className='primary-button' onClick={() => router.push('/explore')}>EXPLORE</button>
         </div>
         <div className='absolute flex w-[50px] right-[10px] top-[70px] sm:top-[0px]  h-full'>
           <button onClick={toggleModal} className="text-white rounded-lg text-sm text-center inline-flex items-center">

@@ -12,7 +12,7 @@ const Nav = () => {
           <button className='primary-button' onClick={() => router.push('/')}>OMNIVERSE</button>
         </div>
         <div className='button-borders'>
-          <button className='primary-button' onClick={() => router.push('/greg')}>GREG</button>
+          <button className='primary-button' onClick={() => router.push('/explore')}>EXPLORE</button>
         </div>
         
         <Web3Status />
