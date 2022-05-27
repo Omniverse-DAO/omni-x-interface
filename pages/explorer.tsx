@@ -169,7 +169,7 @@ const Explorer: NextPage = () => {
                     <AccordionPrice title="Attributes" />
                 </div>
             </div>
-            <div className='w-full border-t-2'>
+            <div className='w-full border-t-2 overflow-auto hide-scrollbar' style={{height: 'calc(100vh - 23rem - 2px)', maxHeight: 'calc(100vh - 23rem - 2px)'}}>
                 <div className='w-full max-w-full flex flex-row collection-items px-10 py-6'>
                     <div className='collection-item flex flex-col'>
                         <Image
