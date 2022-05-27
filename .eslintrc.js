@@ -9,6 +9,7 @@ module.exports = {
   ],
   rules: {
     indent: 'off',
+    "@typescript-eslint/ban-ts-comment": "off",
     "no-mixed-spaces-and-tabs": 0, // disable rule
   },
   env: {
