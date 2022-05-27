@@ -7,6 +7,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Roboto Mono';
+  height: 100%;
 }
 
 .abel {
@@ -194,6 +195,14 @@ input:focus-visible {
   color: #555;
 }
 
+.text-grey-400 {
+  color: #ADB5BD;
+}
+
+.bg-collection {
+  background-color: #F8F9FA;
+}
+
 .bg-blue-600 {
   background-color: #5865f2;
 }
@@ -294,4 +303,36 @@ input:focus-visible {
     height: 100%;
     border-radius: 10px;
   }
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.collection-items {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.collection-item {
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+}
+
+.text-ms {
+  font-size: 0.6rem;
+  line-height: 0.875rem;
+}
+
+.counts-div {
+  background-image: url(../static/counts.png);
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-position: center;
+  background-size: contain;
 }
