@@ -8,9 +8,8 @@ module.exports = {
     'plugin:@next/next/recommended'
   ],
   rules: {
-    semi: ['error', 'never'],
-    indent: ['error', 2],
-    quotes: [2, 'single', { avoidEscape: true }],
+    indent: 'off',
+    "no-mixed-spaces-and-tabs": 0, // disable rule
   },
   env: {
     browser: true,
