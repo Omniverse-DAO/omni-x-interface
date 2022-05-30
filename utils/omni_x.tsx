@@ -18,7 +18,7 @@ export function fetchCollection(chainId: any, address: string) {
   let collectionItems: any = []
 
   fetch(`${API_URL}/api/v1/collections`
-  , { credentials: 'include', method: 'GET' }
+  , { credentials: 'include', method: 'GET',  }
   )
   .then(resp => resp.json())
   .then(itemArray => {

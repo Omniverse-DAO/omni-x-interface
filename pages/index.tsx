@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import Nav  from '../components/Nav'
+import MainNav  from '../components/MainNav'
 import Footer from '../components/Footer'
-import Link from 'next/link'
-import Image from 'next/image'
+// import Link from 'next/link'
+// import Image from 'next/image'
 // import { useEffect } from 'react'
 
 
@@ -16,7 +16,7 @@ export default function Home() {
         <link rel="icon" href="/static/favicon.ico" />
         
       </Head>
-      <Nav />
+      <MainNav />
 
       <Footer />
     </div>

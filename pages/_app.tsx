@@ -9,11 +9,11 @@ const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-  	<Web3ReactProvider getLibrary={getLibrary}>
+    <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ProviderNetwork getLibrary={getLibrary}>
-    		<Component {...pageProps} />
+        <Component {...pageProps} />
       </Web3ProviderNetwork>
-  	</Web3ReactProvider>
+    </Web3ReactProvider>
   )
 }
 

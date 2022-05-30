@@ -6,11 +6,14 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@next/next/recommended',
+    'prettier'
   ],
   rules: {
     semi: ['error', 'never'],
     indent: ['error', 2],
     quotes: [2, 'single', { avoidEscape: true }],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@next/next/no-img-element": "off",
   },
   env: {
     browser: true,

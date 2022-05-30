@@ -9,20 +9,15 @@ import AdvancedONT from '../services/abis/AdvancedONT.json'
 import { useActiveWeb3React } from '../hooks/useWeb3'
 import { getContract } from '../utils/contracts.js'
 
-import { useWeb3React } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
-import { BigNumber, ethers } from 'ethers'
+// import { BigNumber, ethers } from 'ethers'
 import { Web3Interface } from '../utils/utils'
 
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Slide } from 'react-toastify'
 
-const chains = [4, 97, 43113, 80001, 421611, 4002, 69]
+// const chains = [4, 97, 43113, 80001, 421611, 4002, 69]
 
-const injected = new InjectedConnector({
-  supportedChainIds: chains
-})
 const addresses: any = {
   '4': {
     address: '0xC8759D18D5c96cce77074249330b9b41A618e51A',
@@ -84,33 +79,25 @@ const addresses: any = {
 
 
 export default function Explore() {
-  const {chainId, activate, account, active } = useActiveWeb3React() as Web3Interface
+  const {chainId, account, library} = useActiveWeb3React() as Web3Interface
 
-  const [mintNum, setMintNum] = useState(1)
-  const [toChain, setToChain] = useState('4')
+
   const [netId, setNetId] = useState('4')
 
-  const [ownToken, setOwnToken] = useState<Number[]>([])
-  const [transferNFT, setTransferNFT] = useState<any>()
-  const [totalNFTCount, setTotalNFTCount] = useState(0)
-  const [nextTokenId, setNextTokenId] = useState(0)
+  const [ownToken, setOwnToken] = useState<number[]>([])
   const [ownTokenisLoading, setOwnTokenisLoading] = useState(true)
-  const [estimateFee, setEstimateFee] = useState('')
-  const [isMinting, setIsMinting] = useState(false)
-  const [isTransferring, setIsTransferring] = useState(false)
+
+  const [transferNFT, setTransferNFT] = useState<any>()
+
+  // const [mintNum, setMintNum] = useState(1)
+  // const [toChain, setToChain] = useState('4')
+  const [totalNFTCount, setTotalNFTCount] = useState(0)
+  // const [nextTokenId, setNextTokenId] = useState(0)
+
+  // const [estimateFee, setEstimateFee] = useState('')
+  // const [isMinting, setIsMinting] = useState(false)
+  // const [isTransferring, setIsTransferring] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
-
-  const { library } = useActiveWeb3React()
-
-
-
-
-
-
-
-
-
-
 
   // async function connect() {
   //   try {
@@ -445,20 +432,26 @@ export default function Explore() {
       try{
         const tokenContract = getContract(addresses[netId].address, AdvancedONT.abi, library, account)
 
-        let result = await tokenContract.balanceOf(account)
-        let token, tokenlist = []
-        for (var i = 0 ;i < Number(result); i++) {
+        console.log('tokenContract =',tokenContract)
+
+        const result = await tokenContract.balanceOf(account)
+        let token = []
+        const tokenlist = []
+
+        for (let i = 0 ;i < Number(result); i++) {
           token = await tokenContract.tokenOfOwnerByIndex(account, i)
           tokenlist.push(Number(token))
         }
   
         setOwnToken(tokenlist)
   
-        let max_mint = await tokenContract.MAX_MINT()
-        let nextId = await tokenContract.nextTokenId()
+        const max_mint = await tokenContract.MAX_MINT()
+        // const nextId = await tokenContract.nextTokenId()
   
         setTotalNFTCount(Number(max_mint))
-        setNextTokenId(Number(nextId))
+        // setNextTokenId(Number(nextId))
+
+        console.log('totalNFTCount =',totalNFTCount)
       } catch(error){
         setNetId(chainId)
         errorToast('Getting NFT Error!!!, Please Check the Internet Connection!!!')
@@ -467,19 +460,18 @@ export default function Explore() {
     }
   }
 
-  console.log("account =", account)
 
+  // const loadingIcon = () => {
+  //   return(
+  //     <>
+  //       <svg role='status' className='inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600' viewBox='0 0 100 101' fill='none' xmlns='http://www.w3.org/2000/svg'>
+  //         <path d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z' fill='currentColor'/>
+  //         <path d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z' fill='#1C64F2'/>
+  //       </svg>
+  //     </>
+  //   )
+  // }
 
-  const loadingIcon = () => {
-    return(
-      <>
-        <svg role='status' className='inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600' viewBox='0 0 100 101' fill='none' xmlns='http://www.w3.org/2000/svg'>
-          <path d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z' fill='currentColor'/>
-          <path d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z' fill='#1C64F2'/>
-        </svg>
-      </>
-    )
-  }
   const errorToast = (error: any) =>{
     toast.error(error,{
       position: toast.POSITION.BOTTOM_RIGHT,
@@ -735,7 +727,7 @@ export default function Explore() {
         <meta name='description' content='A homepage for Omniverse DAO'/>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <MainNav setNetId={setNetId} netId={netId} addresses={addresses} />
+      <MainNav />
       <ToastContainer />
   
 
@@ -827,7 +819,7 @@ export default function Explore() {
           </div> : null} */}
           
 
-          {/* <p className='text-[15px] leading-[18px] m-0 text-left mt-[20px]'>Destination Network</p>
+        {/* <p className='text-[15px] leading-[18px] m-0 text-left mt-[20px]'>Destination Network</p>
           <div className='relative mt-[20px]'>
             <select className='block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-[6px] leading-tight focus:outline-none focus:bg-white focus:border-gray-500' id='grid-state' value={toChain} onChange={(e) => setToChain(e.target.value)}>
               <option value='4'>Rinkeby</option>
