@@ -8,7 +8,7 @@ type AppProps = {
 function App({ children }: AppProps) {
   return (
     <WalletProvider>
-        <Layout>{children}</Layout>
+      <Layout>{children}</Layout>
     </WalletProvider>
   )
 }
