@@ -1,16 +1,19 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.react-3d-carousel .slider-container .slider-content .slider-single .slider-single-content {
+    box-shadow: none !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.react-3d-carousel .slider-container .slider-right div, .react-3d-carousel .slider-container .slider-left div {
+    border: none !important;
 }
 
-* {
-  box-sizing: border-box;
+.fa-arrow-right:before {
+    content: "\f054" !important;
+}
+
+.fa-arrow-left:before {
+    content: "\f053" !important;
 }

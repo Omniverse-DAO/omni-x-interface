@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 
-const Home: NextPage = () => {
+const Market: NextPage = () => {
   return <div />
 }
 
-export default Home
+export default Market
