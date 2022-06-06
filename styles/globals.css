@@ -17,3 +17,35 @@
 .fa-arrow-left:before {
     content: "\f053" !important;
 }
+
+.bg-sidebar-hover {
+    background-color: rgba(180, 68, 249, 0.15);
+}
+button.sidebar {
+    padding-left: 100px;
+}
+.sidebar.active {
+    background-color: #B444F9 !important;
+    color: #FEFEFF !important;
+}
+
+.img-network {
+    width: 36px;
+    height: 36px;
+}
+
+.img-ethereum {
+    background-image: url(/svgs/ethereum.svg);
+}
+
+.sidebar-icon {
+    height: 56px;
+    width: 100%;
+    display: flex;
+}
+
+.bg-wallet-output {
+    background-image: url(/sidebar/wallet_output.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
