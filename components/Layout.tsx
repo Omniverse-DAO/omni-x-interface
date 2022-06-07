@@ -1,10 +1,9 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import useWallet from '../hooks/useWallet'
 import Header from './Header'
 import { useRouter } from 'next/router'
 import Banner from './Banner'
-import ConnectButton from './ConnectButton'
+import SideBar from './SideBar'
 
 type LayoutProps = {
   children?: React.ReactNode
@@ -12,10 +11,6 @@ type LayoutProps = {
 
 const Layout: React.FC = ({ children }: LayoutProps) => {
   const router = useRouter()
-  
-  const {
-    connect: connectWallet,
-  } = useWallet()
 
   const [ menu, setMenu ] = useState('home')
 
@@ -29,10 +24,6 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
     }
   }, [router.pathname])
 
-  const handleConnect = useCallback(async () => {
-    await connectWallet()
-  }, [connectWallet])
-
   return (
     <>
       <Head>
@@ -42,12 +33,12 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
           content='width=device-width, initial-scale=1, maximum-scale=1'
         />
       </Head>
-      <div className='w-full flex'>
+      <main className='w-full flex'>
+        <SideBar />
         <Header menu={menu} />
         <Banner hidden={menu=='home'?false:true} />
-        <ConnectButton onConnect={handleConnect} />
-      </div>
-      {children}
+        {children}
+      </main>
     </>
   )
 }
