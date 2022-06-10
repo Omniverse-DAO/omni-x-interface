@@ -49,3 +49,26 @@ button.sidebar {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+.fade-left{
+    background: linear-gradient(to right, #F8F9FA, #f8f9fa00);
+    border-radius: 14px;
+    z-index:2;
+    width: 15%;
+    height:100%;
+    left:40px;
+}
+.fade-right{
+    background: linear-gradient(to left, #F8F9FA, #f8f9fa00);
+    border-radius: 14px;
+    z-index:2;
+    width: 15%;
+    height:100%;
+    right:40px;
+}
+.slide{
+    background: #F8F9FA;
+    border-radius: 14px;
+    z-index:2;
+    width: 100%;
+}

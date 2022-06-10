@@ -10,13 +10,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "3d-react-carousal": "^5.0.0",
     "@testing-library/dom": "^8.13.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.2.0",
     "@types/jest": "^28.1.0",
     "@walletconnect/web3-provider": "^1.7.8",
-    "3d-react-carousal": "^5.0.0",
     "ethers": "^5.6.8",
     "framer-motion": "^6.3.10",
     "imagemin-svgo": "^9.0.0",
@@ -27,6 +27,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.4.0",
+    "swiper": "^8.2.2",
     "walletlink": "^2.5.0",
     "web3modal": "^1.9.7"
   },
