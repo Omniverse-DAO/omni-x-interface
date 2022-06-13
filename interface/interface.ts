@@ -1,13 +1,17 @@
-import { StaticImageData } from 'next/image'
 import React from 'react'
 
-export type IPropsServices = {
-  background: string
-  title: string
-  image: StaticImageData
-}
-
-export interface IPropsSlider{
+export interface IPropsSlider {
   title?:string,
   images:Array<React.ReactNode>;
+}
+
+export interface IPropsImage {
+  nfts: Array<NFTItem>
+}
+
+export interface NFTItem {
+  image: React.ReactNode
+  title: string
+  id: string
+  chain: string
 }
