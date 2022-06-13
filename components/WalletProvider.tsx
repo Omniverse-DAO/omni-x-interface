@@ -3,6 +3,7 @@ import { ethers, Signer } from 'ethers'
 import Web3Modal, { IProviderOptions, providers } from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import WalletLink from 'walletlink'
+import { getChainInfo } from '../helpers/constant'
 import { WalletContext } from '../contexts/wallet'
 
 const cachedLookupAddress = new Map<string, string | undefined>()
@@ -84,6 +85,36 @@ export const WalletProvider = ({
     }
   }, [web3Modal, handleAccountsChanged])
 
+  const switchNetwork = useCallback(async (chainName: string) => {
+    const chainInfo = getChainInfo(chainName)
+    const CHAIN_ID = chainInfo?.chainId || 4
+    if (window.ethereum) {
+      if (window.ethereum.networkVersion !== 4) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: ethers.utils.hexlify(CHAIN_ID) }]
+          })
+        } catch (e: any) {
+          console.log('error', e)
+          if (e.code === 4902) {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainName: chainInfo?.name,
+                  chainId: ethers.utils.hexlify(CHAIN_ID),
+                  nativeCurrency: { name: chainInfo?.nativeCurrency.name, decimals: chainInfo?.nativeCurrency.decimals, symbol: chainInfo?.nativeCurrency.symbol },
+                  rpcUrls: chainInfo?.rpc
+                }
+              ]
+            })
+          }
+        }
+      }
+    }
+  }, [])
+
   useEffect(() => {
     const infuraId =
       process.env.NEXT_PUBLIC_INFURA_ID || 'b6058e03f2cd4108ac890d3876a56d0d'
@@ -154,6 +185,7 @@ export const WalletProvider = ({
         web3Modal,
         resolveName,
         lookupAddress,
+        switchNetwork,
         connect,
         disconnect,
       }}

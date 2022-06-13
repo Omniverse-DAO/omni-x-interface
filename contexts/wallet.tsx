@@ -9,6 +9,7 @@ export type WalletContextType = {
   web3Modal: Web3Modal | undefined
   resolveName: (name: string) => Promise<string | undefined>
   lookupAddress: (address: string) => Promise<string | undefined>
+  switchNetwork: (chainIndex: number) => Promise<void>
   connect: () => Promise<Signer | undefined>
   disconnect: () => Promise<void>
 }
@@ -20,6 +21,7 @@ export const WalletContext = createContext<WalletContextType>({
   web3Modal: undefined,
   resolveName: async () => undefined,
   lookupAddress: async () => undefined,
+  switchNetwork: async () => undefined,
   connect: async () => undefined,
   disconnect: async () => undefined,
 })
