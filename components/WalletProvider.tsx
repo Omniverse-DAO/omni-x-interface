@@ -85,8 +85,8 @@ export const WalletProvider = ({
     }
   }, [web3Modal, handleAccountsChanged])
 
-  const switchNetwork = useCallback(async (chainName: string) => {
-    const chainInfo = getChainInfo(chainName)
+  const switchNetwork = useCallback(async (chainIndex: number) => {
+    const chainInfo = getChainInfo(chainIndex)
     const CHAIN_ID = chainInfo?.chainId || 4
     if (window.ethereum) {
       if (window.ethereum.networkVersion !== 4) {

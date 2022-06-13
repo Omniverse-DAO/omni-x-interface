@@ -5,7 +5,7 @@ const environments: any = {
   testnet: ['Rinkeby', 'Arbitrum Rinkeby', 'Avalanche Fuji Testnet', 'Binance Smart Chain Testnet', 'Fantom Testnet', 'Optimism Kovan', 'Mumbai']
 }
   
-export const getChainInfo = (chainIndex: string) => {
+export const getChainInfo = (chainIndex: number) => {
   const env = process.env.NEXT_PUBLICE_ENVIRONMENT || 'testnet'
   const chainName = environments[env][chainIndex]
   const filter = CHAINS.filter((item) => item.name.toLowerCase() === chainName.toLowerCase())
