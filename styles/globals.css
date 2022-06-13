@@ -72,3 +72,7 @@ button.sidebar {
     z-index:2;
     width: 100%;
 }
+
+.fw-60{
+    width:60%;
+}

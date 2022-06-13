@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-// import Avatar from '../public/images/avatar.png'
+
 import Tabs from '../components/Tabs'
 
 
