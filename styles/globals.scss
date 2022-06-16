@@ -76,3 +76,29 @@ button.sidebar {
 .fw-60{
     width:60%;
 }
+
+.user-input {
+    height: 50px;
+    width: 50%;
+    background-color: #F8F9FA;
+    border: 2px solid #E9ECEF;
+    &:focus{
+        outline: none;
+        border: 2px solid #dbdbdb;
+    }
+}
+.user-textarea {
+    height: 75px;
+    width: 100%;
+    background-color: #F8F9FA;
+    border: 2px solid #E9ECEF;
+    &:focus{
+        outline: none;
+        border: 2px solid #dbdbdb;
+    }
+}
+
+.border-image img{
+    border-radius: 10px;
+    border:2px #B444F9 solid !important;
+}

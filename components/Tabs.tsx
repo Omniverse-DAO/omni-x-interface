@@ -95,11 +95,16 @@ const feed:Array<FeedItem> = [
     view: 12200,
   },
 ]
-const Tabs = () => {
+
+type TabProps = {
+  blur: boolean,
+}
+
+const Tabs = ({blur}:TabProps) => {
   const [currentTab, setCurrentTable] = React.useState<string>('NFTs')
   return (
     <>
-      <div className="w-full mt-20 px-32">
+      <div className={`w-full mt-20 px-32 ${blur?'blur-sm':''}`}>
         <div className="px-12">
           <ul className="flex flex-wrap relative justify-item-stretch text-sm font-medium text-center text-gray-500 border-b-4 border-gray-300 dark:border-gray-700 dark:text-gray-400 px-8">
             <li className={`select-none inline-block border-2 border-zince-800 text-xl p-4 text-zinc-800 ${currentTab==='NFTs'?'bg-slate-200':'bg-slate-100'} rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40`} onClick={()=>setCurrentTable('NFTs')}>

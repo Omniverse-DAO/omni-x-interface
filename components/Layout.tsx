@@ -4,7 +4,6 @@ import Header from './Header'
 import { useRouter } from 'next/router'
 import Banner from './Banner'
 import SideBar from './SideBar'
-
 import banner_1 from '../public/images/banner-1.png'
 import banner_2 from '../public/images/banner-2.png'
 import banner_3 from '../public/images/banner-3.png'
@@ -12,7 +11,7 @@ import banner_4 from '../public/images/banner-4.png'
 import banner_5 from '../public/images/banner-5.png'
 import banner_6 from '../public/images/banner-6.png'
 import Image from 'next/image'
-
+import useWallet  from '../hooks/useWallet'
 type LayoutProps = {
   children?: React.ReactNode
 }
@@ -29,18 +28,28 @@ secondSlides.push(<Image src={banner_6} alt="banner - 6" />)
 
 const Layout: React.FC = ({ children }: LayoutProps) => {
   const router = useRouter()
-
+  const context = useWallet()
   const [ menu, setMenu ] = useState('home')
+
+  const [isBlur, setIsBlur] = useState<boolean>(false)
+  
 
   useEffect(() => {
     if ( router.pathname === '/market' ) {
       setMenu('market')
     } else if ( router.pathname === '/analytics' ) {
       setMenu('analytics')
-    } else {
+    } else if ( router.pathname === '/' ) {
       setMenu('home')
+    } else{
+      setMenu('others')
     }
   }, [router.pathname])
+
+  useEffect(()=>{
+    console.log(context)
+    setIsBlur(context.signer?false:true)
+  }, [context, context.signer])
 
   return (
     <>
@@ -54,7 +63,7 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
       <main className='w-full flex flex-col'>
         <SideBar />
         <Header menu={menu} />
-        <Banner hidden={false} slides={menu==='home'?firstSlides:secondSlides} />
+        <Banner hidden={menu==='home' || menu==='market'?false:true} slides={menu==='home'?firstSlides:secondSlides} blur={isBlur?true:false} menu={menu} />
         {children}
       </main>
     </>

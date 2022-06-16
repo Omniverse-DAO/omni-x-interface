@@ -23,3 +23,4 @@ export const WalletContext = createContext<WalletContextType>({
   connect: async () => undefined,
   disconnect: async () => undefined,
 })
+
