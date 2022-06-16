@@ -1,10 +1,16 @@
-import { useRef, useLayoutEffect, useState } from 'react'
+import { useRef, useLayoutEffect, useState, useCallback } from 'react'
+import useWallet from '../hooks/useWallet'
 
 interface RefObject {
   offsetHeight: number
 }
 
 const SideBar: React.FC = () => {
+  const {
+    connect: connectWallet,
+    switchNetwork
+  } = useWallet()
+
   const [showSidebar, setShowSidebar] = useState(false)
   const [onMenu, setOnMenu] = useState(false)
   const [expandedMenu, setExpandedMenu] = useState(0)
@@ -62,6 +68,11 @@ const SideBar: React.FC = () => {
 
   const toggleMenu = (menu: number) => {
     setExpandedMenu(menu == expandedMenu ? 0 : menu)
+  }
+
+  const onClickNetwork = async (networkIndex: number) => {
+    await connectWallet()
+    await switchNetwork(networkIndex)
   }
 
   return (
@@ -151,7 +162,7 @@ const SideBar: React.FC = () => {
             { expandedMenu == 2 &&
               <ul className='flex flex-col w-full space-y-4 p-6 pl-[80px] pt-8 pb-0 text-g-600' ref={menu_ethereum}>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(0)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/ethereum.svg" width={24} height={28} />
                     </div>
@@ -159,7 +170,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/arbitrum.svg" width={35} height={30} />
                     </div>
@@ -167,7 +178,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(2)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/avax.svg" width={23} height={35} />
                     </div>
@@ -175,7 +186,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(3)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/binance.svg" width={29} height={30} />
                     </div>
@@ -183,7 +194,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(4)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/fantom.svg" width={25} height={25} />
                     </div>
@@ -191,7 +202,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(5)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/optimism.svg" width={25} height={25} />
                     </div>
@@ -199,7 +210,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row">
+                  <button className="flex flex-row" onClick={() => onClickNetwork(6)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/polygon.svg" width={34} height={30} />
                     </div>
