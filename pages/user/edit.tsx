@@ -1,11 +1,13 @@
 import React from 'react'
 import type { NextPage } from 'next'
 import Image from 'next/image'
+import axios from 'axios'
 import Close from '../../public/images/close.png'
 import Default from '../../public/images/banner-1.png'
 import Twitter from '../../public/images/twitter.png'
 import Web from '../../public/images/web.png'
 import Photo from '../../public/images/photo.png'
+import useWallet from '../../hooks/useWallet'
 const UserEdit: NextPage = () => {
   const [selectedImage, setSelectedImage] = React.useState()
   const hiddenFileInput = React.useRef(null)
@@ -15,6 +17,11 @@ const UserEdit: NextPage = () => {
   const hiddenFileBanner2 = React.useRef(null)
   const [selectedBanner3, setSelectedBanner3] = React.useState()
   const hiddenFileBanner3 = React.useRef(null)
+  const [userName, setUserName] = React.useState<string>('')
+  const [bio, setBio] = React.useState<string>('')
+  const [twitter, setTwitter] = React.useState<string>('')
+  const [website, setWebsite] = React.useState<string>('')
+  const context = useWallet()
   // This function will be triggered when the file field change
   const imageChange = (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -52,6 +59,22 @@ const UserEdit: NextPage = () => {
     /*Collecting node-element and performing click*/
     hiddenFileBanner3.current.click()
   }
+  const api = 'http://localhost:5000/api/v1/users/'
+  const saveProfile = async () => {
+    const profile = {
+      address: context.address,
+      username: userName,
+      bio: bio,
+      twitter: twitter,
+      website: website,
+      photo: selectedImage,
+    }
+    
+    const response = await axios.post(`${api}profile`, profile)
+    console.log(response)
+    return response
+  }
+
   return (
     <>
       <div className="mt-44 px-32 w-full">
@@ -197,13 +220,18 @@ const UserEdit: NextPage = () => {
           <div className="ml-7 w-full">
             <div className="w-full mb-3">
               <div className="text-[#6C757D]">username:</div>
-              <input type="text" className="user-input" />
+              <input
+                type="text"
+                className="user-input"
+                onChange={(e) => setUserName(e.target.value)}
+              />
             </div>
             <div className="text-[#6C757D]">
               <div>bio:</div>
               <textarea
                 className="user-textarea w-full"
                 placeholder="(200 characters max)"
+                onChange={(e) => setBio(e.target.value)}
               />
             </div>
             <div className="w-full mb-3 mt-3 flex items-center">
@@ -214,6 +242,7 @@ const UserEdit: NextPage = () => {
                 type="text"
                 className="user-input"
                 placeholder="https://"
+                onChange={(e) => setTwitter(e.target.value)}
               />
             </div>
             <div className="w-full mb-5 flex items-center">
@@ -224,7 +253,17 @@ const UserEdit: NextPage = () => {
                 type="text"
                 className="user-input"
                 placeholder="https://"
+                onChange={(e) => setWebsite(e.target.value)}
               />
+            </div>
+            <div className="flex space-x-2 justify-end mb-5">
+              <button
+                type="button"
+                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                onClick={()=>saveProfile()}
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
