@@ -1,5 +1,5 @@
 import { Carousel } from '3d-react-carousal'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from '../helpers/classNames'
@@ -7,6 +7,9 @@ import Avatar from '../public/images/avatar.png'
 import Setting from '../public/images/setting.png'
 import Twitter from '../public/images/twitter.png'
 import Web from '../public/images/web.png'
+import { useSelector } from "react-redux"
+import { selectUser } from '../redux/reducers/userReducer'
+
 type BannerProps = {
   hidden: boolean
   slides: Array<React.ReactNode>
@@ -15,6 +18,10 @@ type BannerProps = {
 }
 
 const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
+  
+  const user = useSelector(selectUser)
+  console.log(user)
+
   return (
     <>
       <div
@@ -30,27 +37,36 @@ const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
           <div className="flex justify-center w-full ">
             <div className="flex justify-between justify-center fw-60 mt-5 relative">
               <div className="-top-[10rem] left-[5rem] absolute">
-                <Image src={Avatar} width={200} height={200} alt="avatar" />
+                <Image src={process.env.API_URL + user.avatar} width={200} height={200} alt="avatar" />
               </div>
               <div className="flex flex-col ml-[18rem]">
-                <div className="text-[26px] text-slate-800">seaviva.eth</div>
+                <div className="text-[26px] text-slate-800">{user.username}</div>
                 <div className="text-[#6C757D] text-[16px] ml-3 mt-3">
-                  <div>livin de life one day at a time</div>
-                  <div>skyrim 4 lyfe</div>
+                  {user.bio}
                 </div>
               </div>
               <div className="flex ml-[]">
                 <Link href="/user/edit">
-                  <div className="mr-6">
-                    <Image src={Setting} alt="avatar" />
-                  </div>
+                  <a>
+                    <div className="mr-6">
+                      <Image src={Setting} alt="avatar" />
+                    </div>
+                  </a>
                 </Link>
-                <div className="mr-3">
-                  <Image src={Twitter} alt="avatar" />
-                </div>
-                <div>
-                  <Image src={Web} alt="avatar" />
-                </div>
+                <Link href={user.twitter?user.twitter:''}>
+                  <a>
+                    <div className="mr-6">
+                  <Image src={Twitter} alt="twitter" />
+                    </div>
+                  </a>
+                </Link>
+                <Link href={user.website?user.website:''}>
+                  <a>
+                    <div className="mr-6">
+                  <Image src={Web} alt="website" />
+                    </div>
+                  </a>
+                </Link>
               </div>
             </div>
           </div>

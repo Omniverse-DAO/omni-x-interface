@@ -3,6 +3,8 @@ import Head from 'next/head'
 import Header from './Header'
 import { useRouter } from 'next/router'
 import Banner from './Banner'
+import { useDispatch } from "react-redux"
+import { getUser } from '../redux/reducers/userReducer'
 import SideBar from './SideBar'
 import banner_1 from '../public/images/banner-1.png'
 import banner_2 from '../public/images/banner-2.png'
@@ -12,6 +14,7 @@ import banner_5 from '../public/images/banner-5.png'
 import banner_6 from '../public/images/banner-6.png'
 import Image from 'next/image'
 import useWallet  from '../hooks/useWallet'
+import SnackbarComponent from './SnackBar'
 type LayoutProps = {
   children?: React.ReactNode
 }
@@ -33,6 +36,13 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
 
   const [isBlur, setIsBlur] = useState<boolean>(false)
   
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if ( context.address != undefined ) {
+      dispatch(getUser(context.address))
+    }
+  }, [context.address])
 
   useEffect(() => {
     if ( router.pathname === '/market' ) {
@@ -47,7 +57,6 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   }, [router.pathname])
 
   useEffect(()=>{
-    console.log(context)
     setIsBlur(context.signer?false:true)
   }, [context, context.signer])
 
@@ -60,6 +69,7 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
           content='width=device-width, initial-scale=1, maximum-scale=1'
         />
       </Head>
+      <SnackbarComponent />
       <main className='w-full flex flex-col'>
         <SideBar />
         <Header menu={menu} />

@@ -1,4 +1,7 @@
 import { useRef, useLayoutEffect, useState } from 'react'
+import { useSelector } from "react-redux"
+import { selectUser } from '../redux/reducers/userReducer'
+import Image from 'next/image'
 
 interface RefObject {
   offsetHeight: number
@@ -16,6 +19,8 @@ const SideBar: React.FC = () => {
   const menu_bridge = useRef<HTMLDivElement>(null)
   const menu_cart = useRef<HTMLDivElement>(null)
   const [offsetMenu, setOffsetMenu] = useState(0)
+  
+  const user = useSelector(selectUser)
 
   useLayoutEffect(() => {
     if ( menu_profile.current && expandedMenu == 1 ) {
@@ -75,7 +80,7 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src="/sidebar/profile.jpg" className="m-auto" />
+                <img src={user.avatar?process.env.API_URL + user.avatar:"/sidebar/ethereum.png"} className="m-auto w-[45px] h-[45px]" />
               </div>
             </div>
             <div className="w-full py-[8px]">
