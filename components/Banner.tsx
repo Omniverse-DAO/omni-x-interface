@@ -20,7 +20,6 @@ type BannerProps = {
 const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
   
   const user = useSelector(selectUser)
-  console.log(user)
 
   return (
     <>

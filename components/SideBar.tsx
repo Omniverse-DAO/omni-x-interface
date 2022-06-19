@@ -1,4 +1,5 @@
 import { useRef, useLayoutEffect, useState } from 'react'
+import useWallet from '../hooks/useWallet'
 import { useSelector } from "react-redux"
 import { selectUser } from '../redux/reducers/userReducer'
 import Image from 'next/image'
