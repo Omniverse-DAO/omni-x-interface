@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 import userReducer from "./reducers/userReducer"
 import snackBarReducer from "./reducers/snackBarReducer"
 
-const bindMiddleware = (middleware) => {
+const bindMiddleware = (middleware: any) => {
   if (process.env.NODE_ENV !== 'production') {
     const { composeWithDevTools } = require('redux-devtools-extension')
     return composeWithDevTools(applyMiddleware(...middleware))
@@ -18,7 +18,7 @@ const combinedReducer = combineReducers({
   snackBarState: snackBarReducer,
 })
 
-const reducer = (state, action) => {
+const reducer = (state: any, action: any) => {
   if (action.type === HYDRATE) {
     const nextState = {
       ...state, // use previous state

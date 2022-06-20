@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Dispatch } from 'react'
 import { userService } from '../../services/users'
 import { openSnackBar } from './snackBarReducer'
 
@@ -26,7 +27,7 @@ export const userSlice = createSlice({
 //actions
 export const { setUser, setUpdatingUser, setGettingUser } = userSlice.actions
 
-export const getUser = (address: string) => async (dispatch: any) => {
+export const getUser = (address: string) => async (dispatch: Dispatch<any>) => {
     dispatch(setGettingUser(true))
     try {
         const user = await userService.getUserByAddress(address)
@@ -38,7 +39,7 @@ export const getUser = (address: string) => async (dispatch: any) => {
     }
 }
 
-export const updateUser = (user: FormData) => async (dispatch) => {
+export const updateUser = (user: FormData) => async (dispatch: Dispatch<any>) => {
     dispatch(setUpdatingUser(true))
 
     try {

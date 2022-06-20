@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import useWallet from '../hooks/useWallet'
-import { useSelector } from "react-redux"
+import { useSelector } from 'react-redux'
 import { selectUser } from '../redux/reducers/userReducer'
 import Image from 'next/image'
 
@@ -91,7 +91,7 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src={user.avatar?process.env.API_URL + user.avatar:"/sidebar/ethereum.png"} className="m-auto w-[45px] h-[45px]" />
+                <img src={user.avatar?process.env.API_URL + user.avatar:'/sidebar/ethereum.png'} className="m-auto w-[45px] h-[45px]" />
               </div>
             </div>
             <div className="w-full py-[8px]">
@@ -407,7 +407,7 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src={user.avatar?process.env.API_URL + user.avatar:"/sidebar/ethereum.png"} className="m-auto w-[45px] h-[45px]" />
+                <img src={user.avatar?process.env.API_URL + user.avatar:'/sidebar/ethereum.png'} className="m-auto w-[45px] h-[45px]" />
               </div>
               { expandedMenu == 1 &&
                 <ul className='flex flex-col w-full space-y-4 p-6 pt-8' style={{height: offsetMenu + 'px'}}>

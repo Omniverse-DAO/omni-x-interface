@@ -8,7 +8,7 @@ import Web from '../../public/images/web.png'
 import Photo from '../../public/images/photo.png'
 import useWallet from '../../hooks/useWallet'
 import { useRouter } from 'next/router'
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from 'react-redux'
 import { updateUser, getUser, selectUser } from '../../redux/reducers/userReducer'
 
 const UserEdit: NextPage = () => {
@@ -30,7 +30,7 @@ const UserEdit: NextPage = () => {
 
   useEffect(() => {
     if ( context.address != undefined ) {
-      dispatch(getUser(context.address))
+      dispatch(getUser(context.address) as any)
     }
   }, [context.address])
 
@@ -69,16 +69,16 @@ const UserEdit: NextPage = () => {
     }
   }
   const onClickAvatar = () => {
-    document.getElementById("image_avatar")?.click()
+    document.getElementById('image_avatar')?.click()
   }
   const onClickBanner_1 = () => {
-    document.getElementById("image_banner_1")?.click()
+    document.getElementById('image_banner_1')?.click()
   }
   const onClickBanner_2 = () => {
-    document.getElementById("image_banner_2")?.click()
+    document.getElementById('image_banner_2')?.click()
   }
   const onClickBanner_3 = () => {
-    document.getElementById("image_banner_3")?.click()
+    document.getElementById('image_banner_3')?.click()
   }
 
   const updateProfile = async (e: React.SyntheticEvent) => {
@@ -88,8 +88,8 @@ const UserEdit: NextPage = () => {
     if ( updateProfileFormRef.current !== null ) {
       const formData = new FormData(updateProfileFormRef.current)
       const address = context.address?context.address:''
-      formData.append("address", address)
-      dispatch(updateUser(formData))
+      formData.append('address', address)
+      dispatch(updateUser(formData) as any)
       router.push('/')
     }
   }
@@ -139,7 +139,7 @@ const UserEdit: NextPage = () => {
                   </div>
                   <div className="border-image">
                     <Image
-                      src={(typeof banner_1 == "string")?banner_1:URL.createObjectURL(banner_1)}
+                      src={(typeof banner_1 == 'string')?banner_1:URL.createObjectURL(banner_1)}
                       alt="first image"
                       layout="responsive"
                       width={200}
@@ -163,7 +163,7 @@ const UserEdit: NextPage = () => {
                   </div>
                   <div className="border-image">
                     <Image
-                      src={(typeof banner_2 == "string")?banner_2:URL.createObjectURL(banner_2)}
+                      src={(typeof banner_2 == 'string')?banner_2:URL.createObjectURL(banner_2)}
                       alt="first image"
                       layout="responsive"
                       width={200}
@@ -187,7 +187,7 @@ const UserEdit: NextPage = () => {
                   </div>
                   <div className="border-image">
                     <Image
-                      src={(typeof banner_3 == "string")?banner_3:URL.createObjectURL(banner_3)}
+                      src={(typeof banner_3 == 'string')?banner_3:URL.createObjectURL(banner_3)}
                       alt="first image"
                       layout="responsive"
                       width={200}
@@ -213,7 +213,7 @@ const UserEdit: NextPage = () => {
                   <Image src={Photo} alt="photo" />
                 </div>
                 <Image
-                  src={(typeof avatar == "string")?avatar:URL.createObjectURL(avatar)}
+                  src={(typeof avatar == 'string')?avatar:URL.createObjectURL(avatar)}
                   alt="avatar"
                   width={250}
                   height={250}

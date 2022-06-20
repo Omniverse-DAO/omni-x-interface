@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Header from './Header'
 import { useRouter } from 'next/router'
 import Banner from './Banner'
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from 'react-redux'
 import { getUser, selectUpdatingUser } from '../redux/reducers/userReducer'
 import SideBar from './SideBar'
 import banner_1 from '../public/images/banner-1.png'
@@ -40,10 +40,10 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if ( context.address != undefined || !updatingUser ) {
-      dispatch(getUser(context.address))
+    if ( context.address != undefined && !updatingUser ) {
+      dispatch(getUser(context.address) as any)
     }
-  }, [context.address, updatingUser])
+  }, [context.address, updatingUser, dispatch])
 
   useEffect(() => {
     if ( router.pathname === '/market' ) {

@@ -3,11 +3,10 @@ import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from '../helpers/classNames'
-import Avatar from '../public/images/avatar.png'
 import Setting from '../public/images/setting.png'
 import Twitter from '../public/images/twitter.png'
 import Web from '../public/images/web.png'
-import { useSelector } from "react-redux"
+import { useSelector } from 'react-redux'
 import { selectUser } from '../redux/reducers/userReducer'
 
 type BannerProps = {
@@ -55,14 +54,14 @@ const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
                 <Link href={user.twitter?user.twitter:''}>
                   <a>
                     <div className="mr-6">
-                  <Image src={Twitter} alt="twitter" />
+                  <Image src={Twitter} alt='twitter' />
                     </div>
                   </a>
                 </Link>
                 <Link href={user.website?user.website:''}>
                   <a>
                     <div className="mr-6">
-                  <Image src={Web} alt="website" />
+                  <Image src={Web} alt='website' />
                     </div>
                   </a>
                 </Link>
