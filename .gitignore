@@ -34,6 +34,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-yarn.lock
 package-lock.json
 .eslintrc.local.js

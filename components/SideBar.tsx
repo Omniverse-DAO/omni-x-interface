@@ -407,7 +407,7 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src="/sidebar/profile.jpg" className="m-auto" />
+                <img src={user.avatar?process.env.API_URL + user.avatar:"/sidebar/ethereum.png"} className="m-auto w-[45px] h-[45px]" />
               </div>
               { expandedMenu == 1 &&
                 <ul className='flex flex-col w-full space-y-4 p-6 pt-8' style={{height: offsetMenu + 'px'}}>

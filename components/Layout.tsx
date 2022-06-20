@@ -3,8 +3,8 @@ import Head from 'next/head'
 import Header from './Header'
 import { useRouter } from 'next/router'
 import Banner from './Banner'
-import { useDispatch } from "react-redux"
-import { getUser } from '../redux/reducers/userReducer'
+import { useDispatch, useSelector } from "react-redux"
+import { getUser, selectUpdatingUser } from '../redux/reducers/userReducer'
 import SideBar from './SideBar'
 import banner_1 from '../public/images/banner-1.png'
 import banner_2 from '../public/images/banner-2.png'
@@ -33,16 +33,17 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const router = useRouter()
   const context = useWallet()
   const [ menu, setMenu ] = useState('home')
+  const updatingUser = useSelector(selectUpdatingUser)
 
   const [isBlur, setIsBlur] = useState<boolean>(false)
   
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if ( context.address != undefined ) {
+    if ( context.address != undefined || !updatingUser ) {
       dispatch(getUser(context.address))
     }
-  }, [context.address])
+  }, [context.address, updatingUser])
 
   useEffect(() => {
     if ( router.pathname === '/market' ) {
