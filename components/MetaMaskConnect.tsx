@@ -12,9 +12,10 @@ const MetaMaskConnect = ({onConnect, context}:ConnectButtonProps): JSX.Element =
   const [show, setShow] = React.useState<boolean>(true)
 
   React.useEffect(()=>{
-    if(context.signer) setShow(false)
+    if(context.address) setShow(false)
     else setShow(true)
-  },[context.signer])
+  },[context.address])
+  
   return (
     <>
       {show && <div className="flex justify-center items-center w-screen h-screen bg-[#ffffff90] fixed z-[1]">

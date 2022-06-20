@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import Header from './Header'
 import { useRouter } from 'next/router'
@@ -31,7 +31,10 @@ secondSlides.push(<Image src={banner_6} alt="banner - 6" />)
 
 const Layout: React.FC = ({ children }: LayoutProps) => {
   const router = useRouter()
-  const context = useWallet()
+  const {
+    address,
+  } = useWallet()
+  
   const [ menu, setMenu ] = useState('home')
   const updatingUser = useSelector(selectUpdatingUser)
 
@@ -40,10 +43,10 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if ( context.address != undefined && !updatingUser ) {
-      dispatch(getUser(context.address) as any)
+    if ( address != undefined && !updatingUser ) {
+      dispatch(getUser(address) as any)
     }
-  }, [context.address, updatingUser, dispatch])
+  }, [address, updatingUser, dispatch])
 
   useEffect(() => {
     if ( router.pathname === '/market' ) {
@@ -58,8 +61,9 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   }, [router.pathname])
 
   useEffect(()=>{
-    setIsBlur(context.signer?false:true)
-  }, [context, context.signer])
+    setIsBlur(address?false:true)
+  }, [address])
+
 
   return (
     <>

@@ -7,17 +7,21 @@ import useWallet from '../hooks/useWallet'
 const Home: NextPage = () => {
   const context = useWallet()
   const [isBlur, setIsBlur] = React.useState<boolean>(false)
+
   React.useEffect(() => {
-    setIsBlur(context.signer ? false : true)
-  }, [context.signer])
+    setIsBlur(context.address ? false : true)
+  }, [context.address])
+  
   return (
     <>
-      <MetaMaskConnect
-        onConnect={async () => {
-          context.connect()
-        }}
-        context={context}
-      />
+      {isBlur &&
+        <MetaMaskConnect
+          onConnect={async () => {
+            context.connect()
+          }}
+          context={context}
+        />
+      }
       <Tabs blur={isBlur} />
     </>
   )
