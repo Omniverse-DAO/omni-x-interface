@@ -9,7 +9,8 @@ export const userSlice = createSlice({
     initialState: {
         updatingUser: false,
         gettingUser: true,
-        user: {}
+        user: {},
+        nfts: [],
     },
     reducers: {
         setUser: (state, action) => {
@@ -20,12 +21,15 @@ export const userSlice = createSlice({
         },
         setGettingUser: (state, action) => {
             state.gettingUser = action.payload === undefined ? false : action.payload
+        },
+        setUserNFTs: (state, action) => {
+            state.nfts = action.payload === undefined ? [] : action.payload
         }
     }
 })
 
 //actions
-export const { setUser, setUpdatingUser, setGettingUser } = userSlice.actions
+export const { setUser, setUpdatingUser, setGettingUser, setUserNFTs } = userSlice.actions
 
 export const getUser = (address: string) => async (dispatch: Dispatch<any>) => {
     dispatch(setGettingUser(true))
@@ -53,9 +57,18 @@ export const updateUser = (user: FormData) => async (dispatch: Dispatch<any>) =>
     }
 }
 
+export const getUserNFTs = (address: string) => async (dispatch: Dispatch<any>) => {
+    try {
+        const nfts = await userService.getUserNFTs(address)
+        dispatch(setUserNFTs(nfts))
+    } catch (error) {
+    }
+}
+
 //selectors
 export const selectUser = (state: any) => state.userState.user
 export const selectUpdatingUser = (state: any) => state.userState.updatingUser
 export const selectGettingUser = (state: any) => state.userState.gettingUser
+export const selectUserNFTs = (state: any) => state.userState.nfts
 
 export default userSlice.reducer

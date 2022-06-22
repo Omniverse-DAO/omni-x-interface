@@ -10,7 +10,13 @@ const getUserByAddress = async (address: string) => {
     return res.data.data
 }
 
+const getUserNFTs = async (address: string) => {
+    const res = await API.get(`users/nfts/${address}`)
+    return res.data.data
+}
+
 export const userService = {
     updateProfile,
-    getUserByAddress
+    getUserByAddress,
+    getUserNFTs
 }

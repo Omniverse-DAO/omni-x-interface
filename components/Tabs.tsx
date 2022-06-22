@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import NFTGrid from './NFTGrid'
 import WatchList from './WatchList'
@@ -7,8 +7,11 @@ import Stats from './Stats'
 import pfp from '../public/images/image 29.png'
 import image_19 from '../public/images/image 19.png'
 import { NFTItem, FeedItem } from '../interface/interface'
+import useWallet from '../hooks/useWallet'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserNFTs, selectUserNFTs } from '../redux/reducers/userReducer'
 
-const nfts: Array<NFTItem> = [
+/*const nfts: Array<NFTItem> = [
   {
     title: 'BoredApeYachtClub',
     id: '#6583',
@@ -57,7 +60,7 @@ const nfts: Array<NFTItem> = [
     image: <Image src={pfp} alt="image - 25" layout="responsive" />,
     chain: 'ether',
   },
-]
+]*/
 
 const feed:Array<FeedItem> = [
   {
@@ -102,6 +105,20 @@ type TabProps = {
 
 const Tabs = ({blur}:TabProps) => {
   const [currentTab, setCurrentTable] = React.useState<string>('NFTs')
+  const dispatch = useDispatch()
+
+  const {
+    address
+  } = useWallet()
+
+  const nfts = useSelector(selectUserNFTs)
+
+  useEffect(() => {
+    if ( address ) {
+      dispatch(getUserNFTs(address) as any)
+    }
+  }, [address])
+
   return (
     <>
       <div className={`w-full mt-20 px-32 ${blur?'blur-sm':''}`}>

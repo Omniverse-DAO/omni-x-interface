@@ -3,21 +3,22 @@ import Image from 'next/image'
 import { IPropsImage, NFTItem } from '../interface/interface'
 import Ether from '../public/images/ether.png'
 import Round from '../public/images/round-refresh.png'
-const NFTGrid = ({ nfts }: IPropsImage) => {
+import pfp from '../public/images/image 29.png'
+const NFTGrid = ({ nfts }) => {
   return (
     <>
       <div className="w-full mb-5 mt-10">
         <div className="grid grid-cols-5 gap-10">
-          {nfts.map((item: NFTItem, index: number) => {
+          {nfts.map((item, index) => {
             return (
               <div className="" key={index}>
-                {item.image}
+                <Image src={pfp} alt="image - 25" layout="responsive" />
                 <div className="flex flex-row pt-2 justify-start">
                   <div className="ml-1 text-[#6C757D] text-[12px] font-[500]">
-                    {item.title}
+                    {'BoredApeYachtClub'}
                   </div>
                   <div className="ml-1 text-[#6C757D] text-[12px] font-[500]">
-                    {item.id}
+                    {'#6583'}
                   </div>
                 </div>
                 <div className="flex flex-row pt-2 justify-between align-middle">
