@@ -13,10 +13,14 @@ export interface IPropsFeed {
   feed: Array<FeedItem>
 }
 
+export interface IPropsNFTItem {
+  nft: NFTItem
+}
+
 export interface NFTItem {
-  image: React.ReactNode
-  title: string
-  id: string
+  name: string,
+  token_uri: string,
+  token_id: string,
   chain: string
 }
 

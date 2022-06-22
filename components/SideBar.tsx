@@ -25,6 +25,7 @@ const SideBar: React.FC = () => {
   const menu_bridge = useRef<HTMLDivElement>(null)
   const menu_cart = useRef<HTMLDivElement>(null)
   const [offsetMenu, setOffsetMenu] = useState(0)
+  const [avatarError, setAvatarError] = useState(false)
   
   const user = useSelector(selectUser)
 
@@ -91,7 +92,15 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src={user.avatar?process.env.API_URL + user.avatar:'/sidebar/ethereum.png'} className="m-auto w-[45px] h-[45px]" />
+                <div className="m-auto">
+                  <Image 
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                    alt="avatar" 
+                    onError={(e)=>{setAvatarError(true)}} 
+                    width={45}
+                    height={45}
+                  />
+                </div>
               </div>
             </div>
             <div className="w-full py-[8px]">
@@ -407,7 +416,15 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src={user.avatar?process.env.API_URL + user.avatar:'/sidebar/ethereum.png'} className="m-auto w-[45px] h-[45px]" />
+                <div className="m-auto">
+                  <Image 
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                    alt="avatar" 
+                    onError={(e)=>{setAvatarError(true)}} 
+                    width={45}
+                    height={45}
+                  />
+                </div>
               </div>
               { expandedMenu == 1 &&
                 <ul className='flex flex-col w-full space-y-4 p-6 pt-8' style={{height: offsetMenu + 'px'}}>

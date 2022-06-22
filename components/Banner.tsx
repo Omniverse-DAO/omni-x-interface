@@ -1,5 +1,5 @@
 import { Carousel } from '3d-react-carousal'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from '../helpers/classNames'
@@ -19,6 +19,7 @@ type BannerProps = {
 const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
   
   const user = useSelector(selectUser)
+  const [avatarError, setAvatarError] = useState(false)
 
   return (
     <>
@@ -35,7 +36,13 @@ const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
           <div className="flex justify-center w-full ">
             <div className="flex justify-between justify-center fw-60 mt-5 relative">
               <div className="-top-[10rem] left-[5rem] absolute">
-                <Image src={process.env.API_URL + user.avatar} width={200} height={200} alt="avatar" />
+                <Image 
+                  src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                  alt="avatar" 
+                  onError={(e)=>{setAvatarError(true)}} 
+                  width={200}
+                  height={200}
+                />
               </div>
               <div className="flex flex-col ml-[18rem]">
                 <div className="text-[26px] text-slate-800">{user.username}</div>
@@ -54,14 +61,14 @@ const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
                 <Link href={user.twitter?user.twitter:''}>
                   <a>
                     <div className="mr-6">
-                  <Image src={Twitter} alt='twitter' />
+                      <Image src={Twitter} alt='twitter' />
                     </div>
                   </a>
                 </Link>
                 <Link href={user.website?user.website:''}>
                   <a>
                     <div className="mr-6">
-                  <Image src={Web} alt='website' />
+                      <Image src={Web} alt='website' />
                     </div>
                   </a>
                 </Link>
