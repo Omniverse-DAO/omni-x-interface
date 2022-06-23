@@ -10,13 +10,12 @@ import { useSelector } from 'react-redux'
 import { selectUser } from '../redux/reducers/userReducer'
 
 type BannerProps = {
-  hidden: boolean
   slides: Array<React.ReactNode>
   blur: boolean
   menu: string
 }
 
-const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
+const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
   
   const user = useSelector(selectUser)
   const [avatarError, setAvatarError] = useState(false)
@@ -27,7 +26,6 @@ const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
         className={classNames(
           'w-full',
           'mt-40',
-          hidden ? 'hidden' : '',
           blur && menu ==='home'? 'blur-sm' : ''
         )}
       >

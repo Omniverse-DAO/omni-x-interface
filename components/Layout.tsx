@@ -2,32 +2,16 @@ import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import Header from './Header'
 import { useRouter } from 'next/router'
-import Banner from './Banner'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUser, selectUpdatingUser } from '../redux/reducers/userReducer'
+import { getUser, selectUpdatingUser, selectUser } from '../redux/reducers/userReducer'
 import SideBar from './SideBar'
-import banner_1 from '../public/images/banner-1.png'
-import banner_2 from '../public/images/banner-2.png'
-import banner_3 from '../public/images/banner-3.png'
-import banner_4 from '../public/images/banner-4.png'
-import banner_5 from '../public/images/banner-5.png'
-import banner_6 from '../public/images/banner-6.png'
-import Image from 'next/image'
 import useWallet  from '../hooks/useWallet'
 import SnackbarComponent from './SnackBar'
+import Banner from './Banner'
+import default_slides from '../utils/defaultSlides'
 type LayoutProps = {
   children?: React.ReactNode
 }
-
-const firstSlides:Array<React.ReactNode> = []
-firstSlides.push(<Image src={banner_1} alt="banner - 1" />)
-firstSlides.push(<Image src={banner_2} alt="banner - 2" />)
-firstSlides.push(<Image src={banner_3} alt="banner - 3" />)
-
-const secondSlides:Array<React.ReactNode> = []
-secondSlides.push(<Image src={banner_4} alt="banner - 4" />)
-secondSlides.push(<Image src={banner_5} alt="banner - 5" />)
-secondSlides.push(<Image src={banner_6} alt="banner - 6" />)
 
 const Layout: React.FC = ({ children }: LayoutProps) => {
   const router = useRouter()
@@ -39,6 +23,8 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const updatingUser = useSelector(selectUpdatingUser)
 
   const [isBlur, setIsBlur] = useState<boolean>(false)
+  const [currentSlides, setCurrentSlides] = useState(default_slides)
+  const user = useSelector(selectUser)
   
   const dispatch = useDispatch()
 
@@ -64,6 +50,38 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
     setIsBlur(address?false:true)
   }, [address])
 
+  useEffect(() => {
+    if ( menu === 'home' && user.banners && user.banners.length == 3 ) {
+      const new_slides:Array<React.ReactNode> = []
+      new_slides.push(<img src={process.env.API_URL + user.banners[0]} alt="banner - 1" />)
+      new_slides.push(<img src={process.env.API_URL + user.banners[1]} alt="banner - 2" />)
+      new_slides.push(<img src={process.env.API_URL + user.banners[2]} alt="banner - 3" />)
+      setCurrentSlides(new_slides)
+    }
+  }, [menu, user.banners])
+
+  useEffect(() => {
+    if ( menu === 'market' ) {
+      const new_slides:Array<React.ReactNode> = []
+      new_slides.push(<img src='/images/banner-4.png' alt="banner - 1" />)
+      new_slides.push(<img src='/images/banner-5.png' alt="banner - 2" />)
+      new_slides.push(<img src='/images/banner-6.png' alt="banner - 3" />)
+      setCurrentSlides(new_slides)
+    } else if ( menu === 'home' ) {
+      const new_slides:Array<React.ReactNode> = []
+      if ( user.banners && user.banners.length == 3 ) {
+        new_slides.push(<img src={process.env.API_URL + user.banners[0]} alt="banner - 1" />)
+        new_slides.push(<img src={process.env.API_URL + user.banners[1]} alt="banner - 2" />)
+        new_slides.push(<img src={process.env.API_URL + user.banners[2]} alt="banner - 3" />)
+      } else {
+        new_slides.push(<img src='/images/banner-1.png' alt="banner - 1" />)
+        new_slides.push(<img src='/images/banner-2.png' alt="banner - 2" />)
+        new_slides.push(<img src='/images/banner-3.png' alt="banner - 3" />)
+      }
+      setCurrentSlides(new_slides)
+    }
+  }, [menu])
+
 
   return (
     <>
@@ -78,7 +96,9 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
       <main className='w-full flex flex-col'>
         <SideBar />
         <Header menu={menu} />
-        <Banner hidden={menu==='home' || menu==='market'?false:true} slides={menu==='home'?firstSlides:secondSlides} blur={isBlur?true:false} menu={menu} />
+        <div className={menu==='home'||menu==='market'?'':'hidden'}>
+          <Banner slides={currentSlides} blur={isBlur} menu={menu} />
+        </div>
         {children}
       </main>
     </>
