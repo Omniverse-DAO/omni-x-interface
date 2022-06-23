@@ -39,7 +39,7 @@ const Banner = ({ hidden, slides, blur, menu }: BannerProps): JSX.Element => {
                 <Image 
                   src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
                   alt="avatar" 
-                  onError={(e)=>{setAvatarError(true)}} 
+                  onError={(e)=>{user.avatar&&setAvatarError(true)}} 
                   width={200}
                   height={200}
                 />

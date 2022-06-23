@@ -22,11 +22,15 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
       const tokenURI = nft.token_uri
       setChain(chain_list[nft.chain])
       if (tokenURI) {
-        // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
-        const requestURL = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
-        const tokenURIResponse = await (await fetch(requestURL)).json()
-        const imageURI = tokenURIResponse.image
-        setImage(imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+        try {
+          // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
+          const requestURL = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
+          const tokenURIResponse = await (await fetch(requestURL)).json()
+          const imageURI = tokenURIResponse.image
+          setImage(imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+        } catch (err) {
+          console.log(err)
+        }
       }
     }
 

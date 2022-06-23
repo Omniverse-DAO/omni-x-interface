@@ -96,7 +96,7 @@ const SideBar: React.FC = () => {
                   <Image 
                     src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
                     alt="avatar" 
-                    onError={(e)=>{setAvatarError(true)}} 
+                    onError={(e)=>{user.avatar&&setAvatarError(true)}} 
                     width={45}
                     height={45}
                   />
@@ -420,7 +420,7 @@ const SideBar: React.FC = () => {
                   <Image 
                     src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
                     alt="avatar" 
-                    onError={(e)=>{setAvatarError(true)}} 
+                    onError={(e)=>{user.avatar&&setAvatarError(true)}} 
                     width={45}
                     height={45}
                   />
