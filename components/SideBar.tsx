@@ -1,5 +1,8 @@
-import { useRef, useLayoutEffect, useState, useCallback } from 'react'
+import { useRef, useLayoutEffect, useState } from 'react'
 import useWallet from '../hooks/useWallet'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../redux/reducers/userReducer'
+import Image from 'next/image'
 
 interface RefObject {
   offsetHeight: number
@@ -22,6 +25,9 @@ const SideBar: React.FC = () => {
   const menu_bridge = useRef<HTMLDivElement>(null)
   const menu_cart = useRef<HTMLDivElement>(null)
   const [offsetMenu, setOffsetMenu] = useState(0)
+  const [avatarError, setAvatarError] = useState(false)
+  
+  const user = useSelector(selectUser)
 
   useLayoutEffect(() => {
     if ( menu_profile.current && expandedMenu == 1 ) {
@@ -86,7 +92,15 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src="/sidebar/profile.jpg" className="m-auto" />
+                <div className="m-auto">
+                  <Image 
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                    alt="avatar" 
+                    onError={(e)=>{user.avatar&&setAvatarError(true)}} 
+                    width={45}
+                    height={45}
+                  />
+                </div>
               </div>
             </div>
             <div className="w-full py-[8px]">
@@ -402,7 +416,15 @@ const SideBar: React.FC = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src="/sidebar/profile.jpg" className="m-auto" />
+                <div className="m-auto">
+                  <Image 
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                    alt="avatar" 
+                    onError={(e)=>{user.avatar&&setAvatarError(true)}} 
+                    width={45}
+                    height={45}
+                  />
+                </div>
               </div>
               { expandedMenu == 1 &&
                 <ul className='flex flex-col w-full space-y-4 p-6 pt-8' style={{height: offsetMenu + 'px'}}>

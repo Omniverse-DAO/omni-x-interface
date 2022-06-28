@@ -31,8 +31,6 @@ const Slider = (props: IPropsSlider) => {
                 delay: 2000,
                 disableOnInteraction: false,
               }}
-              onSlideChange={() => console.log('slide change')}
-              onSwiper={(swiper) => console.log(swiper)}
             >
               {props.images.map((item, index) => (
                 <SwiperSlide key={index} virtualIndex={index}>

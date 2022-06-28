@@ -72,3 +72,60 @@ button.sidebar {
     z-index:2;
     width: 100%;
 }
+
+.fw-60{
+    width:60%;
+}
+
+.user-input {
+    height: 50px;
+    width: 50%;
+    background-color: #F8F9FA;
+    border: 2px solid #E9ECEF;
+    &:focus{
+        outline: none;
+        border: 2px solid #dbdbdb;
+    }
+}
+.user-textarea {
+    height: 75px;
+    width: 100%;
+    background-color: #F8F9FA;
+    border: 2px solid #E9ECEF;
+    &:focus{
+        outline: none;
+        border: 2px solid #dbdbdb;
+    }
+}
+
+.border-image img{
+    border-radius: 10px;
+    border:2px #B444F9 solid !important;
+}
+
+.web3modal-modal-lightbox{
+    z-index:100 !important;
+}
+
+.nft-image-container {
+  position: relative;
+  width: 100%;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%; /* The padding depends on the width, not on the height, so with a padding-bottom of 100% you will get a square */
+  }
+
+  img {
+    position: absolute; /* Take your picture out of the flow */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; /* Make the picture taking the size of it's parent */
+    width: 100%; /* This if for the object-fit */
+    height: 100%; /* This if for the object-fit */
+    object-fit: contain; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+  }
+}

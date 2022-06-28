@@ -93,7 +93,7 @@ export const WalletProvider = ({
         try {
           await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: ethers.utils.hexlify(CHAIN_ID) }]
+            params: [{ chainId: ethers.utils.hexValue(CHAIN_ID) }]
           })
         } catch (e: any) {
           console.log('error', e)
@@ -103,7 +103,7 @@ export const WalletProvider = ({
               params: [
                 {
                   chainName: chainInfo?.name,
-                  chainId: ethers.utils.hexlify(CHAIN_ID),
+                  chainId: ethers.utils.hexValue(CHAIN_ID),
                   nativeCurrency: { name: chainInfo?.nativeCurrency.name, decimals: chainInfo?.nativeCurrency.decimals, symbol: chainInfo?.nativeCurrency.symbol },
                   rpcUrls: chainInfo?.rpc
                 }
