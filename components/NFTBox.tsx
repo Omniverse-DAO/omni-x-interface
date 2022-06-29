@@ -3,13 +3,6 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { chain_list } from '../utils/utils'
 import Round from '../public/images/round-refresh.png'
-import eth from '../public/svgs/ethereum.svg'
-import bsc from '../public/svgs/binance.svg'
-import matic from '../public/svgs/polygon.svg'
-import avalanche from '../public/svgs/avax.svg'
-import fantom from '../public/svgs/fantom.svg'
-import optimism from '../public/svgs/optimism.svg'
-import arbitrum from '../public/svgs/arbitrum.svg'
 import { NFTItem, IPropsNFTItem } from '../interface/interface'
 
 const NFTBox = ({nft}: IPropsNFTItem) => {
@@ -63,25 +56,25 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
           <span>chain:</span>
           <div className="flex items-center ml-1">
             {chain === 'eth' &&
-              <Image src={eth} alt="eth" width={16} height={16}/>
+              <img src="/svgs/ethereum.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'bsc' &&
-              <Image src={bsc} alt="bsc" width={16} height={16}/>
+              <img src="/svgs/binance.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'matic' &&
-              <Image src={matic} alt="matic" width={16} height={16}/>
+              <img src="/svgs/polygon.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'avalanche' &&
-              <Image src={avalanche} alt="avalanche" width={16} height={16}/>
+              <img src="/svgs/avax.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'fantom' &&
-              <Image src={fantom} alt="fantom" width={16} height={16}/>
+              <img src="/svgs/fantom.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'optimism' &&
-              <Image src={optimism} alt="optimism" width={16} height={16}/>
+              <img src="/svgs/optimism.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'arbitrum' &&
-              <Image src={arbitrum} alt="arbitrum" width={16} height={16}/>
+              <img src="/svgs/arbitrum.svg" className="w-[16px] h-[16px]" />
             }
           </div>
         </div>

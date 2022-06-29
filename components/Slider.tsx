@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { Autoplay } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
@@ -34,7 +35,7 @@ const Slider = (props: IPropsSlider) => {
             >
               {props.images.map((item, index) => (
                 <SwiperSlide key={index} virtualIndex={index}>
-                  {item}
+                  <Link href={'/market/collect_item'}><a>{item}</a></Link>
                 </SwiperSlide>
               ))}
             </Swiper>

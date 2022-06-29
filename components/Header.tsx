@@ -73,16 +73,16 @@ const Header = ({ menu }: HeaderProps): JSX.Element => {
                 </Link>
               </li>
               <li>
-                <Link href='/analytics'>
-                  <a>
-                    <div className={
-                      classNames(
-                        'nav-header',
-                        headerStyle.analytics,
-                        menu == 'analytics' ? headerStyle.active : ''
-                      )} />
-                  </a>
-                </Link>
+                {/* <Link href='/analytics'> */}
+                <a>
+                  <div className={
+                    classNames(
+                      'nav-header',
+                      headerStyle.analytics,
+                      menu == 'analytics' ? headerStyle.active : ''
+                    )} />
+                </a>
+                {/* </Link> */}
               </li>
             </ul>
           </div>

@@ -1,5 +1,5 @@
 interface IChain {
-   [key: string]: string;
+   [key: string]: string
 }
 
 export const chain_list:IChain = {
