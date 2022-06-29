@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { chain_list } from '../utils/utils'
 import Round from '../public/images/round-refresh.png'
 import { NFTItem, IPropsNFTItem } from '../interface/interface'
+import axios from 'axios'
 
 const NFTBox = ({nft}: IPropsNFTItem) => {
 
@@ -18,8 +19,8 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
         try {
           // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
           const requestURL = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
-          const tokenURIResponse = await (await fetch(requestURL)).json()
-          const imageURI = tokenURIResponse.image
+          const tokenURIResponse = await axios.get(requestURL)
+          const imageURI = tokenURIResponse.data.image
           setImage(imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/'))
         } catch (err) {
           console.log(err)
