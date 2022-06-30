@@ -21,7 +21,8 @@ export interface NFTItem {
   name: string,
   token_uri: string,
   token_id: string,
-  chain: string
+  chain: string,
+  metadata: string,
 }
 
 export interface FeedItem {

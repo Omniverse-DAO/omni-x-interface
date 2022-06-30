@@ -9,19 +9,18 @@ import axios from 'axios'
 const NFTBox = ({nft}: IPropsNFTItem) => {
 
   const [chain, setChain] = useState('eth')
-  const [image, setImage] = useState('/images/image 29.png')
+  const [image, setImage] = useState('/images/omnix_logo_black_1.png')
+  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     const updateImage = async() => {
-      const tokenURI = nft.token_uri
+      const metadata = nft.metadata
       setChain(chain_list[nft.chain])
-      if (tokenURI) {
+      if (metadata) {
         try {
           // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
-          const requestURL = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
-          const tokenURIResponse = await axios.get(requestURL)
-          const imageURI = tokenURIResponse.data.image
-          setImage(imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+          const image_uri = JSON.parse(metadata).image
+          setImage(image_uri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
         } catch (err) {
           console.log(err)
         }
@@ -34,7 +33,7 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
   return (
   	<div className="">
       <div className="nft-image-container">
-        <img src={image} alt="nft-image" />
+        <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
       </div>
       <div className="flex flex-row pt-2 justify-start">
         <div className="ml-1 text-[#6C757D] text-[12px] font-[500]">

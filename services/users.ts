@@ -11,7 +11,7 @@ const getUserByAddress = async (address: string) => {
 }
 
 const getUserNFTs = async (address: string) => {
-    const res = await API.get(`users/nfts/${address}`)
+    const res = await API.get(`users/nfts/0xB49213fE8d39F22FECA3779ee5f15b66bF547375`)
     return res.data.data
 }
 
