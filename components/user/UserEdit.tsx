@@ -133,9 +133,9 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
       const formData = new FormData(updateProfileFormRef.current)
       const address = context.address?context.address:''
       formData.append('address', address)
-      formData.append('banner_1', fileBanner_1);
-      formData.append('banner_2', fileBanner_2);
-      formData.append('banner_3', fileBanner_3);
+      formData.append('banner_1', fileBanner_1 as any);
+      formData.append('banner_2', fileBanner_2 as any);
+      formData.append('banner_3', fileBanner_3 as any);
       dispatch(updateUser(formData) as any)
       // router.push('/')
       updateModal('Micheal')
@@ -243,7 +243,7 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                   step={0.01}
                   aria-labelledby="Zoom"
                   // classes={{ root: classes.slider }}
-                  onChange={(e: any, z: number) => setZoom(z)}
+                  onChange={(e, z) => setZoom(z as number)}
                 />
               </div>
               <div className="col-span-1">
