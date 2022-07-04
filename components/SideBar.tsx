@@ -1,8 +1,12 @@
-import { useRef, useLayoutEffect, useState } from 'react'
+import React, {useRef, useLayoutEffect, useState, useEffect} from 'react'
 import useWallet from '../hooks/useWallet'
 import { useSelector } from 'react-redux'
-import { selectUser } from '../redux/reducers/userReducer'
+import {selectUser, selectUserNFTs} from '../redux/reducers/userReducer'
 import Image from 'next/image'
+import {useDndMonitor, useDroppable} from '@dnd-kit/core'
+import {chain_list} from '../utils/utils'
+import LazyLoad from 'react-lazyload'
+import {NFTItem} from '../interface/interface'
 
 interface RefObject {
   offsetHeight: number
@@ -14,9 +18,11 @@ const SideBar: React.FC = () => {
     switchNetwork
   } = useWallet()
 
+  const ref = useRef(null)
   const [showSidebar, setShowSidebar] = useState(false)
   const [onMenu, setOnMenu] = useState(false)
   const [expandedMenu, setExpandedMenu] = useState(0)
+  const [fixed, setFixed] = useState(false)
 
   const menu_profile = useRef<HTMLUListElement>(null)
   const menu_ethereum = useRef<HTMLUListElement>(null)
@@ -26,8 +32,78 @@ const SideBar: React.FC = () => {
   const menu_cart = useRef<HTMLDivElement>(null)
   const [offsetMenu, setOffsetMenu] = useState(0)
   const [avatarError, setAvatarError] = useState(false)
-  
+
+  const nfts = useSelector(selectUserNFTs)
   const user = useSelector(selectUser)
+
+  const [selectedNFTItem, setSelectedNFTItem] = useState<NFTItem>()
+  const [image, setImage] = useState('/images/omnix_logo_black_1.png')
+  const [chain, setChain] = useState('eth')
+  const [imageError, setImageError] = useState(false)
+  const [dragOver, setDragOver] = useState(false)
+  const [dragEnd, setDragEnd] = useState(false)
+  const [targetChain, setTargetChain] = useState(0)
+  const {setNodeRef} = useDroppable({
+    id: 'droppable',
+    data: {
+      accepts: ['NFT'],
+    }
+  })
+
+  // Drag and drop event monitor
+  useDndMonitor({
+    onDragStart(event) {
+      setDragOver(true)
+      setDragEnd(false)
+    },
+    onDragOver(event) {
+      setDragEnd(false)
+    },
+    onDragEnd(event) {
+      const { active: { id } } = event
+      if (id.toString().length > 0) {
+        const index = id.toString().split('-')[1]
+        setSelectedNFTItem(nfts[index])
+        const metadata = nfts[index].metadata
+        setChain(chain_list[nfts[index].chain])
+        if (metadata) {
+          try {
+            // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
+            const image_uri = JSON.parse(metadata).image
+            setImage(image_uri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+          } catch (err) {
+            console.log(err)
+          }
+        }
+      }
+      setDragEnd(true)
+      setDragOver(false)
+    },
+    onDragCancel(event) {
+      setDragEnd(false)
+      setDragOver(false)
+    },
+  })
+
+  /*useEffect(() => {
+    // only add the event listener when the dropdown is opened
+    if (!fixed) return
+    function handleClick(event: any) {
+      console.log(event)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (ref.current && !ref.current.contains(event.target)) {
+        setExpandedMenu(0)
+        setOffsetMenu(0)
+        setShowSidebar(false)
+        setOnMenu(false)
+        setFixed(false)
+      }
+    }
+    window.addEventListener('click', handleClick)
+    // clean up
+    return () => window.removeEventListener('click', handleClick)
+  }, [fixed])*/
 
   useLayoutEffect(() => {
     if ( menu_profile.current && expandedMenu == 1 ) {
@@ -66,14 +142,22 @@ const SideBar: React.FC = () => {
   }
 
   const onLeaveMenu = () => {
-    setExpandedMenu(0)
-    setOffsetMenu(0)
-    setShowSidebar(false)
-    setOnMenu(false)
+    if (!fixed) {
+      setExpandedMenu(0)
+      setOffsetMenu(0)
+      setShowSidebar(false)
+      setOnMenu(false)
+    }
   }
 
   const toggleMenu = (menu: number) => {
     setExpandedMenu(menu == expandedMenu ? 0 : menu)
+    setFixed(false)
+  }
+
+  const fixMenu = (menu: number) => {
+    setExpandedMenu(menu == expandedMenu ? 0 : menu)
+    setFixed(!fixed)
   }
 
   const onClickNetwork = async (networkIndex: number) => {
@@ -81,10 +165,14 @@ const SideBar: React.FC = () => {
     await switchNetwork(networkIndex)
   }
 
+  const handleTargetChainChange = (networkIndex: number) => {
+    setTargetChain(networkIndex)
+  }
+
   return (
     <>
-      { !onMenu && 
-        <div 
+      { !onMenu &&
+        <div
           className='right-0 right-0 w-[70px] py-10 bg-white fixed h-full z-50'
           onMouseEnter={() => setShowSidebar(true)}
           onMouseLeave={() => hideSidebar()}
@@ -93,10 +181,10 @@ const SideBar: React.FC = () => {
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
                 <div className="m-auto">
-                  <Image 
-                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
-                    alt="avatar" 
-                    onError={(e)=>{user.avatar&&setAvatarError(true)}} 
+                  <Image
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)}
+                    alt="avatar"
+                    onError={(e)=>{user.avatar&&setAvatarError(true)}}
                     width={45}
                     height={45}
                   />
@@ -131,7 +219,8 @@ const SideBar: React.FC = () => {
           </div>
         </div>
       }
-      <div 
+      <div
+        ref={ref}
         className={`right-0 right-0 w-[450px] bg-white px-[24px] py-10 fixed h-full z-40 ease-in-out duration-300 ${
           showSidebar || onMenu ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -272,7 +361,7 @@ const SideBar: React.FC = () => {
                 </div>
                 <div className="w-full flex flex-row font-semibold text-[14px]">
                   <div className="w-[88px] px-[11px] py-[9px]">
-                    
+
                   </div>
                   <div className="w-[60px] px-[11px] py-[9px]">
                     43.17
@@ -307,7 +396,7 @@ const SideBar: React.FC = () => {
                 </div>
                 <div className="w-full flex flex-row font-semibold text-[14px]">
                   <div className="w-[88px] px-[11px] py-[9px]">
-                    
+
                   </div>
                   <div className="w-[60px] px-[11px] py-[9px]">
                     43.17
@@ -346,7 +435,7 @@ const SideBar: React.FC = () => {
           <li className="w-full">
             <button
               className={`w-full text-left rounded-full p-6 text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl sidebar ${expandedMenu==5?'active':''}`}
-              onClick={() => toggleMenu(5)}
+              onClick={() => fixMenu(5)}
             >
               Send/Bridge
               <span className="pull-right">
@@ -355,30 +444,45 @@ const SideBar: React.FC = () => {
             </button>
             { expandedMenu == 5 &&
               <div className='flex flex-col w-full space-y-4 p-6 pt-8 pb-0' ref={menu_bridge}>
-                <div className="px-[113px] py-[43px] flex flex-col items-center border border-dashed border-g-300 bg-g-200">
-                  <img src="/sidebar/attach.png" />
+                <div ref={setNodeRef} className="px-[113px] py-[43px] flex flex-col items-center border border-dashed border-g-300 bg-g-200" style={dragOver ? {opacity: 0.4} : {opacity: 1}}>
+                  {
+                    dragOver
+                      ?
+                      <div className="">Drop</div>
+                      :
+                      (
+                        !dragEnd &&
+                        <img src="/sidebar/attach.png" />
+                      )
+                  }
+                  {
+                    dragEnd &&
+                      <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image" />}>
+                        <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
+                      </LazyLoad>
+                  }
                 </div>
                 <span className="font-g-300">Select destination chain:</span>
                 <div className="flex flex-row w-full space-x-[15px]">
-                  <button>
-                    <img src="/svgs/avax.svg" width={23} height={35} />
-                  </button>
-                  <button>
-                    <img src="/svgs/arbitrum.svg" width={35} height={30} />
-                  </button>
-                  <button>
-                    <img src="/svgs/binance.svg" width={29} height={30} />
-                  </button>
-                  <button>
+                  <button onClick={() => handleTargetChainChange(0)}>
                     <img src="/svgs/ethereum.svg" width={24} height={28} />
                   </button>
-                  <button>
+                  <button onClick={() => handleTargetChainChange(1)}>
+                    <img src="/svgs/arbitrum.svg" width={35} height={30} />
+                  </button>
+                  <button onClick={() => handleTargetChainChange(2)}>
+                    <img src="/svgs/avax.svg" width={23} height={35} />
+                  </button>
+                  <button onClick={() => handleTargetChainChange(3)}>
+                    <img src="/svgs/binance.svg" width={29} height={30} />
+                  </button>
+                  <button onClick={() => handleTargetChainChange(4)}>
                     <img src="/svgs/fantom.svg" width={25} height={25} />
                   </button>
-                  <button>
+                  <button onClick={() => handleTargetChainChange(5)}>
                     <img src="/svgs/optimism.svg" width={25} height={25} />
                   </button>
-                  <button>
+                  <button onClick={() => handleTargetChainChange(6)}>
                     <img src="/svgs/polygon.svg" width={34} height={30} />
                   </button>
                 </div>
@@ -410,17 +514,17 @@ const SideBar: React.FC = () => {
             }
           </li>
         </ul>
-        <div 
+        <div
           className='top-0 right-0 w-[70px] py-10 bg-white fixed h-full z-50'
         >
           <div className="flex flex-col items-center space-y-4">
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
                 <div className="m-auto">
-                  <Image 
-                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
-                    alt="avatar" 
-                    onError={(e)=>{user.avatar&&setAvatarError(true)}} 
+                  <Image
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)}
+                    alt="avatar"
+                    onError={(e)=>{user.avatar&&setAvatarError(true)}}
                     width={45}
                     height={45}
                   />

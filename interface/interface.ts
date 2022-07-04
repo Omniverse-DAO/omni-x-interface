@@ -14,7 +14,8 @@ export interface IPropsFeed {
 }
 
 export interface IPropsNFTItem {
-  nft: NFTItem
+  nft: NFTItem,
+  index: number
 }
 
 export interface NFTItem {
@@ -38,4 +39,8 @@ export interface FeedItem {
     content: string
     percent: number
   }
+}
+
+export const ItemTypes = {
+  NFTBox: 'nftbox'
 }
