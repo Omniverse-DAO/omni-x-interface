@@ -227,11 +227,11 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                 image={imageSrc}
                 crop={crop}
                 zoom={zoom}
-                // aspect={16 / 9}
+                aspect={1}
                 onCropChange={setCrop}
                 onCropComplete={onCropComplete}
                 onZoomChange={setZoom}
-                cropSize={{width: 1221, height: 540}}
+                cropSize={{width: 800, height: 354}}
               />
             </div>
             <div className="grid grid-cols-4 gap-4 mt-[2rem]">
