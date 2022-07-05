@@ -20,6 +20,7 @@ export interface IPropsNFTItem {
 
 export interface NFTItem {
   name: string,
+  token_address: string,
   token_uri: string,
   token_id: string,
   chain: string,
