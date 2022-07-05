@@ -94,7 +94,7 @@ const SideBar: React.FC = () => {
               <div className="sidebar-icon">
                 <div className="m-auto">
                   <Image 
-                    src={avatarError?'/uploads/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
                     alt="avatar" 
                     onError={(e)=>{user.avatar&&setAvatarError(true)}} 
                     width={45}
@@ -418,7 +418,7 @@ const SideBar: React.FC = () => {
               <div className="sidebar-icon">
                 <div className="m-auto">
                   <Image 
-                    src={avatarError?'/uploads/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                    src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
                     alt="avatar" 
                     onError={(e)=>{user.avatar&&setAvatarError(true)}} 
                     width={45}

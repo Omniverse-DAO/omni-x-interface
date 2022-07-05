@@ -126,9 +126,9 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
     e.stopPropagation()
 
     if ( updateProfileFormRef.current !== null ) {
-      const fileBanner_1 = await getFileFromUrl(banner_1, 'banner1.jpg')
-      const fileBanner_2 = await getFileFromUrl(banner_2, 'banner2.jpg')
-      const fileBanner_3 = await getFileFromUrl(banner_3, 'banner3.jpg')
+      const fileBanner_1 = await getFileFromUrl(banner_1, 'banner1.png')
+      const fileBanner_2 = await getFileFromUrl(banner_2, 'banner2.png')
+      const fileBanner_3 = await getFileFromUrl(banner_3, 'banner3.png')
 
       const formData = new FormData(updateProfileFormRef.current)
       const address = context.address?context.address:''
@@ -136,6 +136,7 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
       formData.append('banner_1', fileBanner_1 as any)
       formData.append('banner_2', fileBanner_2 as any)
       formData.append('banner_3', fileBanner_3 as any)
+      
       dispatch(updateUser(formData) as any)
       // router.push('/')
       updateModal('Micheal')
