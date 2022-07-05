@@ -9,8 +9,8 @@ import Web from '../public/images/web.png'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../redux/reducers/userReducer'
 import UserEdit from './user/UserEdit'
-import Dialog from '@material-ui/core/Dialog';
-import { makeStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog'
+import { makeStyles } from '@material-ui/core/styles'
 
 type BannerProps = {
   slides: Array<React.ReactNode>
@@ -20,14 +20,14 @@ type BannerProps = {
 
 const useStyles = makeStyles({
   paper: {
-    padding: "2rem",
+    padding: '2rem',
     width: '90%',
     maxWidth: '100%',
   },
-});
+})
 
 const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
-  const classes = useStyles();
+  const classes = useStyles()
   const user = useSelector(selectUser)
   const [avatarError, setAvatarError] = useState(false)
   const [bOpenModal, setOpenModal] = React.useState(false)
@@ -64,7 +64,7 @@ const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
               }
               <div className="-top-[10rem] left-[5rem] absolute">
                 <Image 
-                  src={avatarError?'/images/default_avatar.png':(process.env.API_URL + user.avatar)} 
+                  src={avatarError?'/uploads/default_avatar.png':(process.env.API_URL + user.avatar)} 
                   alt="avatar" 
                   onError={(e)=>{user.avatar&&setAvatarError(true)}} 
                   width={200}
@@ -98,7 +98,7 @@ const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
         )}
       </div>   
       <div className="w-full md:w-auto">
-        <Dialog open={bOpenModal} onClose={() => setOpenModal(false)} aria-labelledby="simple-dialog-title"maxWidth={"xl"} classes={{ paper: classes.paper }}>
+        <Dialog open={bOpenModal} onClose={() => setOpenModal(false)} aria-labelledby='simple-dialog-title' maxWidth={'xl'} classes={{ paper: classes.paper }}>
           <UserEdit updateModal={updateModal} />
         </Dialog>
       </div>

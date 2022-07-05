@@ -40,8 +40,8 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   const [website, setWebsite] = useState('')
   const [selectedTab, setSelectedTab] = useState(0)
 
-  const [cropDlgOpen, setCropDlgOpen] = useState(false);
-  const [imageSrc, setImageSrc] = React.useState<string>("");
+  const [cropDlgOpen, setCropDlgOpen] = useState(false)
+  const [imageSrc, setImageSrc] = React.useState<string>('')
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
@@ -80,32 +80,32 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   const onChangeBanner_1 = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
-      let imageDataUrl = await readFile(file);
+      const imageDataUrl = await readFile(file)
 
-      setCropDlgOpen(true);
-      setImageSrc(imageDataUrl);
-      setBannerSelect(1);
+      setCropDlgOpen(true)
+      setImageSrc(imageDataUrl)
+      setBannerSelect(1)
     }
   }
 
   const onChangeBanner_2 = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
-      let imageDataUrl = await readFile(file);
+      const imageDataUrl = await readFile(file)
 
-      setCropDlgOpen(true);
-      setImageSrc(imageDataUrl);
-      setBannerSelect(2);
+      setCropDlgOpen(true)
+      setImageSrc(imageDataUrl)
+      setBannerSelect(2)
     }
   }
   const onChangeBanner_3 = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
-      let imageDataUrl = await readFile(file);
+      const imageDataUrl = await readFile(file)
 
-      setCropDlgOpen(true);
-      setImageSrc(imageDataUrl);
-      setBannerSelect(3);
+      setCropDlgOpen(true)
+      setImageSrc(imageDataUrl)
+      setBannerSelect(3)
     }
   }
   const onClickAvatar = () => {
@@ -126,16 +126,16 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
     e.stopPropagation()
 
     if ( updateProfileFormRef.current !== null ) {
-      const fileBanner_1 = await getFileFromUrl(banner_1, 'banner1.jpg');
-      const fileBanner_2 = await getFileFromUrl(banner_2, 'banner2.jpg');
-      const fileBanner_3 = await getFileFromUrl(banner_3, 'banner3.jpg');
+      const fileBanner_1 = await getFileFromUrl(banner_1, 'banner1.jpg')
+      const fileBanner_2 = await getFileFromUrl(banner_2, 'banner2.jpg')
+      const fileBanner_3 = await getFileFromUrl(banner_3, 'banner3.jpg')
 
       const formData = new FormData(updateProfileFormRef.current)
       const address = context.address?context.address:''
       formData.append('address', address)
-      formData.append('banner_1', fileBanner_1 as any);
-      formData.append('banner_2', fileBanner_2 as any);
-      formData.append('banner_3', fileBanner_3 as any);
+      formData.append('banner_1', fileBanner_1 as any)
+      formData.append('banner_2', fileBanner_2 as any)
+      formData.append('banner_3', fileBanner_3 as any)
       dispatch(updateUser(formData) as any)
       // router.push('/')
       updateModal('Micheal')
@@ -143,13 +143,12 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   }
 
   const getFileFromUrl = async (url: string, name: string, defaultType = 'image/jpeg') => {
-    console.log(url);
     try {
-      const response = await fetch(url);
-      const data = await response.blob();
+      const response = await fetch(url)
+      const data = await response.blob()
       return new File([data], name, {
         type: data.type || defaultType,
-      });
+      })
     } catch (err) {
       console.log(err)
     }
@@ -164,8 +163,8 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   }
 
   const cropDlgClose = () => {
-    setCropDlgOpen(false);
-  };
+    setCropDlgOpen(false)
+  }
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
@@ -178,17 +177,17 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
         croppedAreaPixels
       )
       switch(bannerSelected) {
-        case 1:
-          setBanner_1(croppedImage as string);
-          break;
-        case 2:
-          setBanner_2(croppedImage as string);
-        break;
-          case 3:
-          setBanner_3(croppedImage as string);
-          break;
+      case 1:
+        setBanner_1(croppedImage as string)
+        break
+      case 2:
+        setBanner_2(croppedImage as string)
+        break
+      case 3:
+        setBanner_3(croppedImage as string)
+        break
       }
-      setCropDlgOpen(false);
+      setCropDlgOpen(false)
     } catch (e) {
       console.error(e)
     }
@@ -219,7 +218,7 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
             </li>
           </ul>
         </div>
-        <Dialog onClose={cropDlgClose} aria-labelledby="simple-dialog-title" open={cropDlgOpen} maxWidth={"lg"}>
+        <Dialog onClose={cropDlgClose} aria-labelledby="simple-dialog-title" open={cropDlgOpen} maxWidth={'lg'}>
           <DialogTitle id="simple-dialog-title">Crop Image</DialogTitle>
           <div className="w-[800px] h-[600px]">
             <div className="relative h-[500px]">
