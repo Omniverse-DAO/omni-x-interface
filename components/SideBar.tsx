@@ -7,7 +7,13 @@ import {useDndMonitor, useDroppable} from '@dnd-kit/core'
 import {chain_list} from '../utils/utils'
 import LazyLoad from 'react-lazyload'
 import {NFTItem} from '../interface/interface'
-import {getLayerZeroEndpointInstance, getNFTInstance, getOmnixBridgeInstance} from '../utils/contracts'
+import {
+  getLayerZeroEndpointInstance,
+  getERC721Instance,
+  getERC1155Instance,
+  getOmnixBridge1155Instance,
+  getOmnixBridgeInstance
+} from '../utils/contracts'
 import {BigNumber, ethers} from 'ethers'
 import {getLayerzeroChainId} from '../utils/constants'
 
@@ -98,26 +104,6 @@ const SideBar: React.FC = () => {
     },
   })
 
-  /*useEffect(() => {
-    // only add the event listener when the dropdown is opened
-    if (!fixed) return
-    function handleClick(event: any) {
-      console.log(event)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (ref.current && !ref.current.contains(event.target)) {
-        setExpandedMenu(0)
-        setOffsetMenu(0)
-        setShowSidebar(false)
-        setOnMenu(false)
-        setFixed(false)
-      }
-    }
-    window.addEventListener('click', handleClick)
-    // clean up
-    return () => window.removeEventListener('click', handleClick)
-  }, [fixed])*/
-
   useLayoutEffect(() => {
     if ( menu_profile.current && expandedMenu == 1 ) {
       const current: RefObject = menu_profile.current
@@ -190,27 +176,27 @@ const SideBar: React.FC = () => {
 
     if (provider?._network?.chainId) {
       if (provider?._network?.chainId === targetChain) return
-      const contractInstance = getOmnixBridgeInstance(provider?._network?.chainId, signer)
-      const nftInstance = getNFTInstance(selectedNFTItem.token_address, signer)
       const lzEndpointInstance = getLayerZeroEndpointInstance(provider?._network?.chainId, provider)
-      const noSignerOmniXInstance = getOmnixBridgeInstance(targetChain, null)
+      const lzTargetChainId = getLayerzeroChainId(targetChain)
+      const _signerAddress = await signer.getAddress()
 
-      if (contractInstance) {
+      if (selectedNFTItem.contract_type === 'ERC721') {
+        const contractInstance = getOmnixBridgeInstance(provider?._network?.chainId, signer)
+        const erc721Instance = getERC721Instance(selectedNFTItem.token_address, signer)
+        const noSignerOmniXInstance = getOmnixBridgeInstance(targetChain, null)
         const dstAddress = await noSignerOmniXInstance.persistentAddresses(selectedNFTItem.token_address)
         let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
         if (dstAddress !== ethers.constants.AddressZero) {
           adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
         }
-        const lzTargetChainId = getLayerzeroChainId(targetChain)
-        const operator = await nftInstance.getApproved(BigNumber.from(selectedNFTItem.token_id))
+        const operator = await erc721Instance.getApproved(BigNumber.from(selectedNFTItem.token_id))
         if (operator !== contractInstance.address) {
-          await (await nftInstance.approve(contractInstance.address, BigNumber.from(selectedNFTItem.token_id))).wait()
+          await (await erc721Instance.approve(contractInstance.address, BigNumber.from(selectedNFTItem.token_id))).wait()
         }
         // Estimate fee from layerzero endpoint
-        const _signerAddress = await signer.getAddress()
-        const _name = await nftInstance.name()
-        const _symbol = await nftInstance.symbol()
-        const _tokenURI = await nftInstance.tokenURI(selectedNFTItem.token_id)
+        const _name = await erc721Instance.name()
+        const _symbol = await erc721Instance.symbol()
+        const _tokenURI = await erc721Instance.tokenURI(selectedNFTItem.token_id)
         const _payload = ethers.utils.defaultAbiCoder.encode(
           ['address', 'address', 'string', 'string', 'string', 'uint256'],
           [selectedNFTItem.token_address, _signerAddress, _name, _symbol, _tokenURI, selectedNFTItem.token_id]
@@ -218,6 +204,31 @@ const SideBar: React.FC = () => {
         const estimatedFee = await lzEndpointInstance.estimateFees(lzTargetChainId, contractInstance.address, _payload, false, adapterParams)
 
         const tx = await contractInstance.wrap(lzTargetChainId, selectedNFTItem.token_address, BigNumber.from(selectedNFTItem.token_id), adapterParams, {
+          value: estimatedFee.nativeFee
+        })
+        await tx.wait()
+      } else if (selectedNFTItem.contract_type === 'ERC1155') {
+        const contractInstance = getOmnixBridge1155Instance(provider?._network?.chainId, signer)
+        const noSignerOmniX1155Instance = getOmnixBridge1155Instance(targetChain, null)
+        const erc1155Instance = getERC1155Instance(selectedNFTItem.token_address, signer)
+        const dstAddress = await noSignerOmniX1155Instance.persistentAddresses(selectedNFTItem.token_address)
+        let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
+        if (dstAddress !== ethers.constants.AddressZero) {
+          adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
+        }
+        const operator = await erc1155Instance.isApprovedForAll(_signerAddress, contractInstance.address)
+        if (!operator) {
+          await (await erc1155Instance.setApprovalForAll(contractInstance.address, true)).wait()
+        }
+        // Estimate fee from layerzero endpoint
+        const _tokenURI = await erc1155Instance.uri(selectedNFTItem.token_id)
+        const _payload = ethers.utils.defaultAbiCoder.encode(
+          ['address', 'address', 'string', 'uint256', 'uint256'],
+          [selectedNFTItem.token_address, _signerAddress, _tokenURI, selectedNFTItem.token_id, selectedNFTItem.amount]
+        )
+        const estimatedFee = await lzEndpointInstance.estimateFees(lzTargetChainId, contractInstance.address, _payload, false, adapterParams)
+
+        const tx = await contractInstance.wrap(lzTargetChainId, selectedNFTItem.token_address, BigNumber.from(selectedNFTItem.token_id), BigNumber.from(selectedNFTItem.amount), adapterParams, {
           value: estimatedFee.nativeFee
         })
         await tx.wait()
@@ -512,7 +523,7 @@ const SideBar: React.FC = () => {
                       )
                   }
                   {
-                    dragEnd &&
+                    selectedNFTItem &&
                       <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image" />}>
                         <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
                       </LazyLoad>
