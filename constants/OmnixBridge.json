@@ -7,11 +7,11 @@
   "optimism": "",
   "fantom": "",
 
-  "rinkeby": "0x1adbB1C62B8460484E04980736415038F34a22aD",
-  "bsc-testnet": "0x02B0EC1e5F2fE54E1c8ac2380ADFc98859e6e6E7",
-  "fuji": "0xC3a7853eF073E641E3F125F8F9C0612a3c763E98",
-  "mumbai": "0x73a326B2CD0FC4a47909749bA7e02127B76294E9",
-  "arbitrum-rinkeby": "0xe3a1518dF0e0f62E090f6C9653ea6E6bc80e8d69",
-  "optimism-kovan": "0x0Ea2bebAc361d927079c0A10faF446B3Cd1c66bc",
-  "fantom-testnet": "0x0Ea2bebAc361d927079c0A10faF446B3Cd1c66bc"
+  "rinkeby": "0xAA021b28dED68aae9b70701f9D48De8EdF77B1DA",
+  "bsc-testnet": "0xD215C072139A9402c223Ac432c326607f996dc9C",
+  "fuji": "0x49F9aE9A02B2F6322AC7d14Bb568b18bCa420B64",
+  "mumbai": "0x69E1D40e93F018098841FdcF0f3AbE2a23c30A29",
+  "arbitrum-rinkeby": "0xc7d5908b281D6a20DA11fAEcA62ADB5bA4b91BE5",
+  "optimism-kovan": "0x5B21BaAF353314a7AA78Fe515A287Ad5E062A442",
+  "fantom-testnet": "0xb21c6Ae1faa08DBE3183291e0820ce0949C06bDA"
 }

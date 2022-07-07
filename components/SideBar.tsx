@@ -60,17 +60,23 @@ const SideBar: React.FC = () => {
     onDragStart(event) {
       setDragOver(true)
       setDragEnd(false)
+
+      setShowSidebar(true)
+      setOnMenu(true)
+      setFixed(true)
+      setExpandedMenu(5)
     },
     onDragOver(event) {
       setDragEnd(false)
     },
     onDragEnd(event) {
       const { active: { id } } = event
-      if (id.toString().length > 0) {
+      if (id.toString().length > 0 && event.over !== null) {
         const index = id.toString().split('-')[1]
         console.log(nfts[index])
         setSelectedNFTItem(nfts[index])
         const metadata = nfts[index].metadata
+        setImageError(false)
         // setChain(chain_list[nfts[index].chain])
         if (metadata) {
           try {
@@ -79,6 +85,7 @@ const SideBar: React.FC = () => {
             setImage(image_uri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
           } catch (err) {
             console.log(err)
+            setImage('/images/omnix_logo_black_1.png')
           }
         }
       }
@@ -189,12 +196,11 @@ const SideBar: React.FC = () => {
       const noSignerOmniXInstance = getOmnixBridgeInstance(targetChain, null)
 
       if (contractInstance) {
-        // TODO: Need to check if the Original NFT is deployed already on target chain
-        console.log(noSignerOmniXInstance)
-        console.log(selectedNFTItem.token_address)
         const dstAddress = await noSignerOmniXInstance.persistentAddresses(selectedNFTItem.token_address)
-        console.log(dstAddress)
-        const adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
+        let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
+        if (dstAddress !== ethers.constants.AddressZero) {
+          adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
+        }
         const lzTargetChainId = getLayerzeroChainId(targetChain)
         const operator = await nftInstance.getApproved(BigNumber.from(selectedNFTItem.token_id))
         if (operator !== contractInstance.address) {
@@ -514,25 +520,25 @@ const SideBar: React.FC = () => {
                 </div>
                 <span className="font-g-300">Select destination chain:</span>
                 <div className="flex flex-row w-full space-x-[15px]">
-                  <button onClick={() => handleTargetChainChange(4)} className={targetChain === 0 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(4)} className={targetChain === 4 ? 'border border-g-300' : ''}>
                     <img src="/svgs/ethereum.svg" width={24} height={28} />
                   </button>
-                  <button onClick={() => handleTargetChainChange(97)} className={targetChain === 1 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(97)} className={targetChain === 97 ? 'border border-g-300' : ''}>
                     <img src="/svgs/binance.svg" width={29} height={30} />
                   </button>
-                  <button onClick={() => handleTargetChainChange(43113)} className={targetChain === 2 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(43113)} className={targetChain === 43113 ? 'border border-g-300' : ''}>
                     <img src="/svgs/avax.svg" width={23} height={35} />
                   </button>
-                  <button onClick={() => handleTargetChainChange(80001)} className={targetChain === 3 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(80001)} className={targetChain === 80001 ? 'border border-g-300' : ''}>
                     <img src="/svgs/polygon.svg" width={34} height={30} />
                   </button>
-                  <button onClick={() => handleTargetChainChange(421611)} className={targetChain === 4 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(421611)} className={targetChain === 421611 ? 'border border-g-300' : ''}>
                     <img src="/svgs/arbitrum.svg" width={35} height={30} />
                   </button>
-                  <button onClick={() => handleTargetChainChange(69)} className={targetChain === 5 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(69)} className={targetChain === 69 ? 'border border-g-300' : ''}>
                     <img src="/svgs/optimism.svg" width={25} height={25} />
                   </button>
-                  <button onClick={() => handleTargetChainChange(4002)} className={targetChain === 6 ? 'border border-g-300' : ''}>
+                  <button onClick={() => handleTargetChainChange(4002)} className={targetChain === 4002 ? 'border border-g-300' : ''}>
                     <img src="/svgs/fantom.svg" width={25} height={25} />
                   </button>
                 </div>

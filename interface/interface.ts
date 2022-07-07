@@ -24,6 +24,7 @@ export interface NFTItem {
   token_uri: string,
   token_id: string,
   chain: string,
+  contract_type: string,
   metadata: string,
 }
 
