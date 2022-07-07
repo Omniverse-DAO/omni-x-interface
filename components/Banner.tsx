@@ -8,8 +8,9 @@ import Twitter from '../public/images/twitter.png'
 import Web from '../public/images/web.png'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../redux/reducers/userReducer'
-import { Modal } from 'react-responsive-modal'
 import UserEdit from './user/UserEdit'
+import Dialog from '@material-ui/core/Dialog'
+import { makeStyles } from '@material-ui/core/styles'
 
 type BannerProps = {
   slides: Array<React.ReactNode>
@@ -17,8 +18,16 @@ type BannerProps = {
   menu: string
 }
 
+const useStyles = makeStyles({
+  paper: {
+    padding: '2rem',
+    width: '90%',
+    maxWidth: '100%',
+  },
+})
+
 const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
-  
+  const classes = useStyles()
   const user = useSelector(selectUser)
   const [avatarError, setAvatarError] = useState(false)
   const [bOpenModal, setOpenModal] = React.useState(false)
@@ -89,9 +98,9 @@ const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
         )}
       </div>   
       <div className="w-full md:w-auto">
-        <Modal styles={{modal: {width: '90%', maxWidth: '100%'} as React.CSSProperties  }} open={bOpenModal} onClose={() => setOpenModal(false)} showCloseIcon={false} center>
-          <UserEdit updateModal={updateModal}/>
-        </Modal>
+        <Dialog open={bOpenModal} onClose={() => setOpenModal(false)} aria-labelledby='simple-dialog-title' maxWidth={'xl'} classes={{ paper: classes.paper }}>
+          <UserEdit updateModal={updateModal} />
+        </Dialog>
       </div>
     </>
   )

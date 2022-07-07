@@ -1,4 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+
+import Cropper from 'react-easy-crop'
+
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Dialog from '@material-ui/core/Dialog'
+import Slider from '@material-ui/core/Slider'
+
+import { getCroppedImg } from './CanvasUtils'
+
 import Image from 'next/image'
 import Close from '../../public/images/close.png'
 import Default from '../../public/images/banner-1.png'
@@ -24,11 +33,18 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   const [banner_1, setBanner_1] = useState(process.env.API_URL + 'uploads\\default_banner.png')
   const [banner_2, setBanner_2] = useState(process.env.API_URL + 'uploads\\default_banner.png')
   const [banner_3, setBanner_3] = useState(process.env.API_URL + 'uploads\\default_banner.png')
+  const [bannerSelected, setBannerSelect] = useState(0)
   const [username, setUserName] = useState('')
   const [bio, setBio] = useState('')
   const [twitter, setTwitter] = useState('')
   const [website, setWebsite] = useState('')
   const [selectedTab, setSelectedTab] = useState(0)
+
+  const [cropDlgOpen, setCropDlgOpen] = useState(false)
+  const [imageSrc, setImageSrc] = React.useState<string>('')
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
 
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
@@ -61,19 +77,35 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
       setAvatar(e.target.files[0])
     }
   }
-  const onChangeBanner_1 = (e: any) => {
+  const onChangeBanner_1 = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
-      setBanner_1(e.target.files[0])
+      const file = e.target.files[0]
+      const imageDataUrl = await readFile(file)
+
+      setCropDlgOpen(true)
+      setImageSrc(imageDataUrl)
+      setBannerSelect(1)
     }
   }
-  const onChangeBanner_2 = (e: any) => {
+
+  const onChangeBanner_2 = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
-      setBanner_2(e.target.files[0])
+      const file = e.target.files[0]
+      const imageDataUrl = await readFile(file)
+
+      setCropDlgOpen(true)
+      setImageSrc(imageDataUrl)
+      setBannerSelect(2)
     }
   }
-  const onChangeBanner_3 = (e: any) => {
+  const onChangeBanner_3 = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
-      setBanner_3(e.target.files[0])
+      const file = e.target.files[0]
+      const imageDataUrl = await readFile(file)
+
+      setCropDlgOpen(true)
+      setImageSrc(imageDataUrl)
+      setBannerSelect(3)
     }
   }
   const onClickAvatar = () => {
@@ -94,19 +126,78 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
     e.stopPropagation()
 
     if ( updateProfileFormRef.current !== null ) {
+      const fileBanner_1 = await getFileFromUrl(banner_1, 'banner1.png')
+      const fileBanner_2 = await getFileFromUrl(banner_2, 'banner2.png')
+      const fileBanner_3 = await getFileFromUrl(banner_3, 'banner3.png')
+
       const formData = new FormData(updateProfileFormRef.current)
       const address = context.address?context.address:''
       formData.append('address', address)
+      formData.append('banner_1', fileBanner_1 as any)
+      formData.append('banner_2', fileBanner_2 as any)
+      formData.append('banner_3', fileBanner_3 as any)
+      
       dispatch(updateUser(formData) as any)
       // router.push('/')
       updateModal('Micheal')
     }
   }
 
+  const getFileFromUrl = async (url: string, name: string, defaultType = 'image/jpeg') => {
+    try {
+      const response = await fetch(url)
+      const data = await response.blob()
+      return new File([data], name, {
+        type: data.type || defaultType,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const readFile = async (file : Blob) => {
+    return new Promise<string>((resolve) => {
+      const reader = new FileReader()
+      reader.addEventListener('load', () => resolve(reader.result as string), false)
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const cropDlgClose = () => {
+    setCropDlgOpen(false)
+  }
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels)
+  }, [])
+
+  const showCroppedImage = useCallback(async () => {
+    try {
+      const croppedImage = await getCroppedImg(
+        imageSrc,
+        croppedAreaPixels
+      )
+      switch(bannerSelected) {
+      case 1:
+        setBanner_1(croppedImage as string)
+        break
+      case 2:
+        setBanner_2(croppedImage as string)
+        break
+      case 3:
+        setBanner_3(croppedImage as string)
+        break
+      }
+      setCropDlgOpen(false)
+    } catch (e) {
+      console.error(e)
+    }
+  }, [imageSrc, croppedAreaPixels])
+
   return (
     <>
       <div className="w-full flex flex-row min-h-[750px]">
-        <div className={classNames('basis-1/6',editStyle.sidemenu)}>
+        <div className={classNames('basis-1/6', editStyle.sidemenu)}>
           <ul>
             <li className={selectedTab == 0 ? classNames(editStyle.current) : ''}>
               <button onClick={() => setSelectedTab(0)} className='flex justify-start'>
@@ -128,6 +219,40 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
             </li>
           </ul>
         </div>
+        <Dialog onClose={cropDlgClose} aria-labelledby="simple-dialog-title" open={cropDlgOpen} maxWidth={'lg'}>
+          <DialogTitle id="simple-dialog-title">Crop Image</DialogTitle>
+          <div className="w-[800px] h-[600px]">
+            <div className="relative h-[500px]">
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+                cropSize={{width: 800, height: 354}}
+              />
+            </div>
+            <div className="grid grid-cols-4 gap-4 mt-[2rem]">
+              <div className="col-span-3 px-[10%]">
+                <Slider
+                  value={zoom}
+                  min={1}
+                  max={3}
+                  step={0.01}
+                  aria-labelledby="Zoom"
+                  // classes={{ root: classes.slider }}
+                  onChange={(e, z) => setZoom(z as number)}
+                />
+              </div>
+              <div className="col-span-1">
+                <button onClick={showCroppedImage} className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                >Crop</button>
+              </div>
+            </div>
+          </div>
+        </Dialog>
         <div className="basis-5/6 pl-4">
           {
             selectedTab == 0 &&
@@ -141,7 +266,6 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                 type="file"
                 onChange={onChangeBanner_1}
                 className="hidden"
-                name="banner_1"
               />
               <input
                 id="image_banner_2"
@@ -149,7 +273,6 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                 type="file"
                 onChange={onChangeBanner_2}
                 className="hidden"
-                name="banner_2"
               />
               <input
                 id="image_banner_3"
@@ -157,7 +280,6 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                 type="file"
                 onChange={onChangeBanner_3}
                 className="hidden"
-                name="banner_3"
               />
               <div className="border-gray-300 bg-[#E9ECEF] border-2 p-5 px-10">
                 <div className="grid grid-cols-3 gap-4 w-full">
