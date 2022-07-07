@@ -1,9 +1,9 @@
 module.exports = {
   env: {
-    API_BASE_URL: 'http://35.171.17.51/api/v1/',
-    API_URL: 'http://35.171.17.51/'
+    API_BASE_URL: 'http://18.212.21.171/api/v1/',
+    API_URL: 'http://18.212.21.171/'
   },
   images: {
-    domains: ['localhost', '35.171.17.51']
+    domains: ['localhost', '18.212.21.171']
   }
 }

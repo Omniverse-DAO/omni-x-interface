@@ -1,15 +1,26 @@
 import {ethers} from 'ethers'
-import {getAddressByName} from './constants'
+import {chains, getAddressByName, rpcProviders} from './constants'
 import OmnixBridgeABI from '../constants/abis/OmnixBridge.json'
 import ERC721ABI from '../constants/abis/ERC721.json'
+import LZEndpointABI from '../constants/abis/LayerzeroEndpoint.json'
 
-const chains: { [ key: number ]: string } = {
-  4: 'rinkeby',
-}
-
-export const getOmnixBridgeInstance = (chainIndex: number, signer: any) => {
-  const chain = chains[chainIndex]
-  const address = getAddressByName('Omnix', chain)
+export const getOmnixBridgeInstance = (chainId: number, signer: any) => {
+  const address = getAddressByName('Omnix', chainId)
+  if (signer === null) {
+    const rpcURL = rpcProviders[chainId]
+    const _provider = new ethers.providers.JsonRpcProvider(
+      rpcURL,
+      {
+        name: chains[chainId],
+        chainId: chainId,
+      }
+    )
+    return new ethers.Contract(
+      address,
+      OmnixBridgeABI,
+      _provider
+    )
+  }
   return new ethers.Contract(
     address,
     OmnixBridgeABI,
@@ -22,5 +33,14 @@ export const getNFTInstance = (contractAddress: string, signer: any) => {
     contractAddress,
     ERC721ABI,
     signer
+  )
+}
+
+export const getLayerZeroEndpointInstance = (chainId: number, provider: any) => {
+  const address = getAddressByName('LayerZeroEndpoint', chainId)
+  return new ethers.Contract(
+    address,
+    LZEndpointABI,
+    provider
   )
 }
