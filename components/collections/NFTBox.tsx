@@ -23,7 +23,7 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
           const image_uri = JSON.parse(metadata).image
           setImage(image_uri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
         } catch (err) {
-          console.log("NFTBox err? ", err)
+          console.log('NFTBox err? ', err)
         }
       }
     }

@@ -26,7 +26,7 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const [currentSlides, setCurrentSlides] = useState(default_slides)
   const user = useSelector(selectUser)
 
-  const [collectionMenu, setCollectionMenu] = useState<boolean>(false);
+  const [collectionMenu, setCollectionMenu] = useState<boolean>(false)
   
   const dispatch = useDispatch()
 
@@ -37,11 +37,11 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   }, [address, updatingUser, dispatch])
 
   useEffect(() => {
-    setCollectionMenu(false);
+    setCollectionMenu(false)
     if ( router.pathname.includes('/collections')) {
       setMenu('collections')
       if ( router.pathname == '/collections' ) {
-        setCollectionMenu(true);
+        setCollectionMenu(true)
       }
     } else if ( router.pathname === '/analytics' ) {
       setMenu('analytics')

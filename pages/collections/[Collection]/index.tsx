@@ -13,8 +13,8 @@ import { getCollectionNFTs, selectCollectionNFTs, getCollectionInfo, selectColle
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import NFTBox from '../../../components/collections/NFTBox'
-import InfiniteScroll from "react-infinite-scroll-component";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import InfiniteScroll from 'react-infinite-scroll-component'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const people = [
   { id: 1, name: 'price: low to high', unavailable: false },
@@ -56,14 +56,14 @@ const Collection: NextPage = () => {
   const fetchMoreData = () => {
     if(nfts.cursor == '') {
       setHasMoreNFTs(false)
-      return;
+      return
     }
     setTimeout(() => {
       if ( sCollectionAddr ) {
         dispatch(getCollectionNFTs(sCollectionAddr, sChain, nfts.cursor) as any)
       }
-    }, 500);
-  };
+    }, 500)
+  }
 
   return (
     <>
@@ -132,7 +132,6 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <div
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => {}}
                 >
                   Buy Now
                   <Switch
@@ -153,7 +152,6 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => {}}
                 >
                   Price
                   <span className="pull-right">
@@ -164,7 +162,6 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => {}}
                 >
                   Blockchain
                   <span className="pull-right">
@@ -175,7 +172,6 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => {}}
                 >
                   Rarity
                   <span className="pull-right">
@@ -186,7 +182,6 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => {}}
                 >
                   Attributes
                   <span className="pull-right">

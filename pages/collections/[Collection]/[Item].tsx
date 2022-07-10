@@ -47,7 +47,7 @@ const Item: NextPage = () => {
   const nftInfo = useSelector(selectNFTInfo)
 
   useEffect(() => {
-    const sChain = chain == undefined ? 'eth' : chain as string;
+    const sChain = chain == undefined ? 'eth' : chain as string
     if ( Collection && Item ) {
       dispatch(getNFTInfo(Collection as string, Item as string, sChain) as any)
     }
@@ -55,7 +55,7 @@ const Item: NextPage = () => {
 
   useEffect(() => {
     if (Object.keys(nftInfo).length !== 0) {
-      var metaData = JSON.parse(nftInfo.metadata)
+      const metaData = JSON.parse(nftInfo.metadata)
       metaData.image = metaData.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
       setMetaData(metaData)
       setImageError(false)

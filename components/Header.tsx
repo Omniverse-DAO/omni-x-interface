@@ -19,21 +19,21 @@ const Header = ({ menu }: HeaderProps): JSX.Element => {
   const [hover, setHovering] = useState<HoverType>({
     hoverMenu: menu,
     isHover: false
-  });
+  })
 
   const handleMouseOver = (hoverMenu: string) => {
     setHovering({
       hoverMenu: hoverMenu,
       isHover: true
-    });
-  };
+    })
+  }
 
   const handleMouseOut = () => {
     setHovering({
       hoverMenu: '',
       isHover: false
-    });
-  };
+    })
+  }
   return (
     <>
       <nav className={

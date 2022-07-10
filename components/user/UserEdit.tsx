@@ -151,7 +151,7 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
         type: data.type || defaultType,
       })
     } catch (err) {
-      console.log("getFileFromUrl err?", err)
+      console.log('getFileFromUrl err?', err)
     }
   }
 
