@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { NextPage } from 'next'
@@ -8,9 +8,13 @@ import Discord from '../../../public/images/discord.png'
 import Twitter from '../../../public/images/twitter.png'
 import Web from '../../../public/images/web.png'
 import Ethereum from '../../../public/sidebar/ethereum.png'
-import USD from '../../../public/images/USD.png'
 
-import gaming from '../../../public/images/gaming.png'
+import { getCollectionNFTs, selectCollectionNFTs, getCollectionInfo, selectCollectionInfo, clearCollectionNFTs } from '../../../redux/reducers/collectionsReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
+import NFTBox from '../../../components/collections/NFTBox'
+import InfiniteScroll from "react-infinite-scroll-component";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const people = [
   { id: 1, name: 'price: low to high', unavailable: false },
@@ -22,6 +26,44 @@ const Collection: NextPage = () => {
   const [expandedMenu, setExpandedMenu] = useState(0)
   const [selected, setSelected] = useState(people[0])
   const [enabled, setEnabled] = useState(false)
+
+  const [hasMoreNFTs, setHasMoreNFTs] = useState(true)
+
+  const router = useRouter()
+  const sCollectionAddr = router.query.Collection as string
+  const sChain = router.query.chain == undefined ? 'eth' : router.query.chain as string
+
+  const dispatch = useDispatch()
+  const nfts = useSelector(selectCollectionNFTs)
+  const info = useSelector(selectCollectionInfo)
+  useEffect(() => {
+    if ( sCollectionAddr ) {
+      dispatch(clearCollectionNFTs() as any)
+      dispatch(getCollectionNFTs(sCollectionAddr, sChain, null) as any)
+      dispatch(getCollectionInfo(sCollectionAddr, sChain) as any)
+    }
+  }, [sCollectionAddr])
+
+  useEffect(() => {
+    if(nfts.cursor == '') {
+      setHasMoreNFTs(false)
+    }
+  }, [nfts])
+
+  // useEffect(() => {
+  // }, [info])
+
+  const fetchMoreData = () => {
+    if(nfts.cursor == '') {
+      setHasMoreNFTs(false)
+      return;
+    }
+    setTimeout(() => {
+      if ( sCollectionAddr ) {
+        dispatch(getCollectionNFTs(sCollectionAddr, sChain, nfts.cursor) as any)
+      }
+    }, 500);
+  };
 
   return (
     <>
@@ -38,19 +80,19 @@ const Collection: NextPage = () => {
             <div className="flex justify-start mt-5">
               <div>
                 <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-normal underline">items</p>
-                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">10,000</p>
+                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">{info.item ? info.item : 0}</p>
               </div>
               <div className="xl:ml-20 lg:ml-10 md:ml-10">
                 <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-normal underline">holders</p>
-                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">6.3k</p>
+                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">{info.owner ? info.owner : 0}</p>
               </div>
               <div className="xl:ml-20 lg:ml-10 md:ml-10">
                 <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-normal underline">floor</p>
-                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3"><span className='mr-3'>86.50</span><Image src={Ethereum} height={25} width={23} alt="" /></p>
+                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3"><span className='mr-3'>0</span><Image src={Ethereum} height={25} width={23} alt="" /></p>
               </div>
               <div className="xl:ml-20 lg:ml-10 md:ml-10">
                 <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-normal underline">sales tax</p>
-                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">5%</p>
+                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">0%</p>
               </div>
             </div>
             <div className='mt-8'>
@@ -90,7 +132,7 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <div
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => console.log(1)}
+                  onClick={() => {}}
                 >
                   Buy Now
                   <Switch
@@ -111,7 +153,7 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => console.log(1)}
+                  onClick={() => {}}
                 >
                   Price
                   <span className="pull-right">
@@ -122,7 +164,7 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => console.log(1)}
+                  onClick={() => {}}
                 >
                   Blockchain
                   <span className="pull-right">
@@ -133,7 +175,7 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => console.log(1)}
+                  onClick={() => {}}
                 >
                   Rarity
                   <span className="pull-right">
@@ -144,7 +186,7 @@ const Collection: NextPage = () => {
               <li className="w-full">
                 <button
                   className={`w-full px-8 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
-                  onClick={() => console.log(1)}
+                  onClick={() => {}}
                 >
                   Attributes
                   <span className="pull-right">
@@ -220,136 +262,32 @@ const Collection: NextPage = () => {
               </div>
             </div>
             <div className="mt-10">
-              <div className="grid 2xl:grid-cols-5 gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
+              {
+                Array.isArray(nfts.list) &&
+                <InfiniteScroll
+                  dataLength={nfts.list.length}
+                  next={fetchMoreData}
+                  hasMore={hasMoreNFTs}
+                  loader={
+                    <div className='flex justify-center items-center'>
+                      <div className="flex justify-center items-center w-[90%] h-[100px]">
+                        <CircularProgress />
                       </div>
                     </div>
+                  }
+                  endMessage={
+                    <div></div>
+                  }
+                >
+                  <div className="grid 2xl:grid-cols-5 gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
+                    { nfts.list.map((item, index) => {
+                      return (
+                        <NFTBox nft={item} key={index} />
+                      )
+                    })}
                   </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div><Image src={gaming} alt="image - 25" layout='responsive' width={230} height={230} /></div>
-                  <div className="text-[#6C757D] text-sm mt-3 px-3">BoredApeYachtClub #6583</div>
-                  <div className="my-3 px-3">
-                    <div className="columns-2">
-                      <div className="flex items-center">
-                        <Image src={USD} height={18} width={18} alt="" />
-                        <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
-                      </div>
-                      <div className="flex items-center flex-row-reverse">
-                        <Image src={Ethereum} height={18} width={16} alt="" />
-                        <span className="text-[#6C757D] text-sm mr-2">chain : </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </InfiniteScroll>
+              }
             </div>
           </div>
         </div>

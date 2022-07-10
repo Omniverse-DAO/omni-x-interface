@@ -25,6 +25,8 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const [isBlur, setIsBlur] = useState<boolean>(false)
   const [currentSlides, setCurrentSlides] = useState(default_slides)
   const user = useSelector(selectUser)
+
+  const [collectionMenu, setCollectionMenu] = useState<boolean>(false);
   
   const dispatch = useDispatch()
 
@@ -35,8 +37,12 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   }, [address, updatingUser, dispatch])
 
   useEffect(() => {
-    if ( router.pathname === '/market' ) {
-      setMenu('market')
+    setCollectionMenu(false);
+    if ( router.pathname.includes('/collections')) {
+      setMenu('collections')
+      if ( router.pathname == '/collections' ) {
+        setCollectionMenu(true);
+      }
     } else if ( router.pathname === '/analytics' ) {
       setMenu('analytics')
     } else if ( router.pathname === '/' ) {
@@ -61,7 +67,7 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   }, [menu, user.banners])
 
   useEffect(() => {
-    if ( menu === 'market' ) {
+    if ( menu === 'collections' ) {
       const new_slides:Array<React.ReactNode> = []
       new_slides.push(<img src='/images/banner-4.png' alt="banner - 1" />)
       new_slides.push(<img src='/images/banner-5.png' alt="banner - 2" />)
@@ -82,7 +88,6 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
     }
   }, [menu])
 
-
   return (
     <>
       <Head>
@@ -95,8 +100,8 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
       <SnackbarComponent />
       <main className='w-full flex flex-col'>
         <SideBar />
-        <Header menu={menu} />
-        <div className={menu==='home'||menu==='market'?'':'hidden'}>
+        <Header menu={menu}/>
+        <div className={menu==='home'||(menu==='collections'&&collectionMenu)?'':'hidden'}>
           <Banner slides={currentSlides} blur={isBlur} menu={menu} />
         </div>
         {children}

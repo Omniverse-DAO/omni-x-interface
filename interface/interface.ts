@@ -21,6 +21,7 @@ export interface NFTItem {
   name: string,
   token_uri: string,
   token_id: string,
+  token_address: string,
   chain: string,
   metadata: string,
 }

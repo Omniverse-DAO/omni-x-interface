@@ -42,7 +42,7 @@ const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
       <div
         className={classNames(
           'w-full',
-          'mt-40',
+          'mt-[134px]',
           blur && menu ==='home'? 'blur-sm' : ''
         )}
       >
