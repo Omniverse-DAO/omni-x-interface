@@ -15,7 +15,6 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
 
   useEffect(() => {
     const updateImage = async() => {
-      console.log(nft)
       const metadata = nft.metadata
       setChain(chain_list[nft.chain])
       if (metadata) {

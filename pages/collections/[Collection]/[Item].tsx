@@ -55,7 +55,6 @@ const Item: NextPage = () => {
 
   useEffect(() => {
     if (Object.keys(nftInfo).length !== 0) {
-      console.log(nftInfo);
       var metaData = JSON.parse(nftInfo.metadata)
       metaData.image = metaData.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
       setMetaData(metaData)
