@@ -240,7 +240,7 @@ const SideBar: React.FC = () => {
     <>
       { !onMenu &&
         <div
-          className='right-0 right-0 w-[70px] py-10 bg-white fixed h-full z-50'
+          className='right-0 right-0 w-[70px] py-10 bg-[#F8F9FA] fixed h-full z-50'
           onMouseEnter={() => setShowSidebar(true)}
           onMouseLeave={() => hideSidebar()}
         >

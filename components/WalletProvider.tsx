@@ -81,7 +81,7 @@ export const WalletProvider = ({
       // TODO: better error handling/surfacing here.
       // Note that web3Modal.connect throws an error when the user closes the
       // modal, as "User closed modal"
-      console.log('error', e)
+      console.log('WalletProvider connect error', e)
     }
   }, [web3Modal, handleAccountsChanged])
 
@@ -96,7 +96,7 @@ export const WalletProvider = ({
             params: [{ chainId: ethers.utils.hexValue(CHAIN_ID) }]
           })
         } catch (e: any) {
-          console.log('error', e)
+          console.log('WalletProvider switchNetwork error', e)
           if (e.code === 4902) {
             await window.ethereum.request({
               method: 'wallet_addEthereumChain',

@@ -79,21 +79,10 @@ const Tabs = ({blur}: TabProps) => {
               onClick={() => setCurrentTable('NFTs')}>
               NFTs
             </li>
-            <li
-              className={`select-none inline-block border-2 border-zince-800 text-xl p-4 text-zinc-800 ${currentTab === 'watchlist' ? 'bg-slate-200' : 'bg-slate-100'} rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40 cursor-pointer`}
-              onClick={() => setCurrentTable('watchlist')}>watchlist
-            </li>
-            <li
-              className={`select-none inline-block border-2 border-zince-800 text-xl p-4 text-zinc-800 ${currentTab === 'feed' ? 'bg-slate-200' : 'bg-slate-100'} rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40 cursor-pointer`}
-              onClick={() => setCurrentTable('feed')}>feed
-            </li>
-            <li
-              className={`select-none inline-block border-2 border-zince-800 text-xl p-4 text-zinc-800 ${currentTab === 'stats' ? 'bg-slate-200' : 'bg-slate-100'} rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40 cursor-pointer`}
-              onClick={() => setCurrentTable('stats')}>stats
-            </li>
-            <li
-              className="select-none border-2 bg-slate-200 font-semibold absolute right-0 justify-self-end border-zince-800 text-xl p-4 text-zinc-600 bg-slate-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-200 w-40">settings
-            </li>
+            <li className={`select-none inline-block border-2 border-zince-800 text-xl p-4 text-zinc-800 ${currentTab==='watchlist'?'bg-slate-200':'bg-slate-100'} rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40 cursor-pointer`} onClick={()=>setCurrentTable('watchlist')}>watchlist</li>
+            <li className={'select-none inline-block border-2 border-zince-800 text-xl p-4 text-zinc-800 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40'}>feed</li>
+            <li className={'select-none border-2 border-zince-800 text-xl p-4 text-zinc-800 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500 w-40'}>stats</li>
+            <li className='select-none border-2 bg-slate-200 font-semibold absolute right-0 justify-self-end border-zince-800 text-xl p-4 text-zinc-600 bg-slate-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-200 w-40'>settings</li>
           </ul>
           {currentTab === 'NFTs' && <NFTGrid nfts={nfts}/>}
           {currentTab === 'watchlist' && <WatchList/>}

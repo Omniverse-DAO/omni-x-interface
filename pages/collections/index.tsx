@@ -56,7 +56,7 @@ serviceSlides.push(<Image src={utility} alt="image - 27" layout='responsive' wid
 serviceSlides.push(<Image src={domains} alt="image - 28" layout='responsive' width={230} height={263}/>)
 serviceSlides.push(<Image src={fashion} alt="image - 29" layout='responsive' width={230} height={263} />)
 
-const Market: NextPage = () => {
+const Collections: NextPage = () => {
   return (
     <>
       <div>
@@ -68,4 +68,4 @@ const Market: NextPage = () => {
   )
 }
 
-export default Market
+export default Collections

@@ -14,7 +14,7 @@ class AppDocument extends Document {
 
   render() {
     return (
-      <Html className="h-full bg-gray-100">
+      <Html className="h-full bg-[#FEFEFF]">
         <Head>
           <meta name="description" content="Omni-X Marketplace" />
           <link rel="icon" href="/favicon.ico" />
