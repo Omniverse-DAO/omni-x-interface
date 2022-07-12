@@ -1,10 +1,9 @@
-import React, {useRef, useLayoutEffect, useState, useEffect} from 'react'
+import React, {useRef, useLayoutEffect, useState} from 'react'
 import useWallet from '../hooks/useWallet'
 import { useSelector } from 'react-redux'
 import {selectUser, selectUserNFTs} from '../redux/reducers/userReducer'
 import Image from 'next/image'
 import {useDndMonitor, useDroppable} from '@dnd-kit/core'
-import {chain_list} from '../utils/utils'
 import LazyLoad from 'react-lazyload'
 import {NFTItem} from '../interface/interface'
 import {
@@ -16,6 +15,8 @@ import {
 } from '../utils/contracts'
 import {BigNumber, ethers} from 'ethers'
 import {getLayerzeroChainId} from '../utils/constants'
+import {Dialog} from '@material-ui/core'
+import ConfirmTransfer from './bridge/ConfirmTransfer'
 
 interface RefObject {
   offsetHeight: number
@@ -34,6 +35,7 @@ const SideBar: React.FC = () => {
   const [onMenu, setOnMenu] = useState(false)
   const [expandedMenu, setExpandedMenu] = useState(0)
   const [fixed, setFixed] = useState(false)
+  const [confirmTransfer, setConfirmTransfer] = useState(false)
 
   const menu_profile = useRef<HTMLUListElement>(null)
   const menu_ethereum = useRef<HTMLUListElement>(null)
@@ -49,11 +51,11 @@ const SideBar: React.FC = () => {
 
   const [selectedNFTItem, setSelectedNFTItem] = useState<NFTItem>()
   const [image, setImage] = useState('/images/omnix_logo_black_1.png')
-  // const [chain, setChain] = useState('eth')
   const [imageError, setImageError] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const [dragEnd, setDragEnd] = useState(false)
   const [targetChain, setTargetChain] = useState(0)
+  const [estimatedFee, setEstimatedFee] = useState(BigNumber.from('0'))
   const {setNodeRef} = useDroppable({
     id: 'droppable',
     data: {
@@ -79,7 +81,6 @@ const SideBar: React.FC = () => {
       const { active: { id } } = event
       if (id.toString().length > 0 && event.over !== null) {
         const index = id.toString().split('-')[1]
-        console.log(nfts[index])
         setSelectedNFTItem(nfts[index])
         const metadata = nfts[index].metadata
         setImageError(false)
@@ -189,6 +190,58 @@ const SideBar: React.FC = () => {
         if (dstAddress !== ethers.constants.AddressZero) {
           adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
         }
+        // Estimate fee from layerzero endpoint
+        const _name = await erc721Instance.name()
+        const _symbol = await erc721Instance.symbol()
+        const _tokenURI = await erc721Instance.tokenURI(selectedNFTItem.token_id)
+        const _payload = ethers.utils.defaultAbiCoder.encode(
+          ['address', 'address', 'string', 'string', 'string', 'uint256'],
+          [selectedNFTItem.token_address, _signerAddress, _name, _symbol, _tokenURI, selectedNFTItem.token_id]
+        )
+        const estimatedFee = await lzEndpointInstance.estimateFees(lzTargetChainId, contractInstance.address, _payload, false, adapterParams)
+        setEstimatedFee(estimatedFee.nativeFee)
+      } else if (selectedNFTItem.contract_type === 'ERC1155') {
+        const contractInstance = getOmnixBridge1155Instance(provider?._network?.chainId, signer)
+        const noSignerOmniX1155Instance = getOmnixBridge1155Instance(targetChain, null)
+        const erc1155Instance = getERC1155Instance(selectedNFTItem.token_address, signer)
+        const dstAddress = await noSignerOmniX1155Instance.persistentAddresses(selectedNFTItem.token_address)
+        let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
+        if (dstAddress !== ethers.constants.AddressZero) {
+          adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
+        }
+        // Estimate fee from layerzero endpoint
+        const _tokenURI = await erc1155Instance.uri(selectedNFTItem.token_id)
+        const _payload = ethers.utils.defaultAbiCoder.encode(
+          ['address', 'address', 'string', 'uint256', 'uint256'],
+          [selectedNFTItem.token_address, _signerAddress, _tokenURI, selectedNFTItem.token_id, selectedNFTItem.amount]
+        )
+        const estimatedFee = await lzEndpointInstance.estimateFees(lzTargetChainId, contractInstance.address, _payload, false, adapterParams)
+        setEstimatedFee(estimatedFee.nativeFee)
+      }
+    }
+
+    setConfirmTransfer(true)
+  }
+
+  const onTransfer = async () => {
+    if (!selectedNFTItem) return
+    if (!signer) return
+
+    if (provider?._network?.chainId) {
+      if (provider?._network?.chainId === targetChain) return
+      const lzEndpointInstance = getLayerZeroEndpointInstance(provider?._network?.chainId, provider)
+      const lzTargetChainId = getLayerzeroChainId(targetChain)
+      const _signerAddress = await signer.getAddress()
+
+      if (selectedNFTItem.contract_type === 'ERC721') {
+        const contractInstance = getOmnixBridgeInstance(provider?._network?.chainId, signer)
+        const erc721Instance = getERC721Instance(selectedNFTItem.token_address, signer)
+        const noSignerOmniXInstance = getOmnixBridgeInstance(targetChain, null)
+        const dstAddress = await noSignerOmniXInstance.persistentAddresses(selectedNFTItem.token_address)
+        let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
+        if (dstAddress !== ethers.constants.AddressZero) {
+          adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
+        }
         const operator = await erc721Instance.getApproved(BigNumber.from(selectedNFTItem.token_id))
         if (operator !== contractInstance.address) {
           await (await erc721Instance.approve(contractInstance.address, BigNumber.from(selectedNFTItem.token_id))).wait()
@@ -234,6 +287,10 @@ const SideBar: React.FC = () => {
         await tx.wait()
       }
     }
+  }
+
+  const updateModal = (status: boolean) => {
+    setConfirmTransfer(status)
   }
 
   return (
@@ -649,6 +706,19 @@ const SideBar: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="w-full md:w-auto">
+        <Dialog open={confirmTransfer} onClose={() => setConfirmTransfer(false)}>
+          <ConfirmTransfer
+            updateModal={updateModal}
+            onTransfer={onTransfer}
+            selectedNFTItem={selectedNFTItem}
+            estimatedFee={estimatedFee}
+            senderChain={provider?._network?.chainId || 4}
+            targetChain={targetChain}
+            image={image}
+          />
+        </Dialog>
       </div>
     </>
   )

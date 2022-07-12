@@ -25,6 +25,51 @@ export const rpcProviders: { [key: number]: string } = {
   4002: 'https://rpc.testnet.fantom.network'
 }
 
+export const chainInfos: { [key: number]: { name: string; logo: string, officialName: string, currency: string } } = {
+  4: {
+    name: 'rinkeby',
+    logo: '/svgs/ethereum.svg',
+    officialName: 'Rinkeby',
+    currency: 'ETH'
+  },
+  97: {
+    name: 'bsc-testnet',
+    logo: '/svgs/binance.svg',
+    officialName: 'BSC',
+    currency: 'BNB'
+  },
+  43113: {
+    name: 'fuji',
+    logo: '/svgs/avax.svg',
+    officialName: 'Fuji',
+    currency: 'AVAX'
+  },
+  80001: {
+    name: 'mumbai',
+    logo: '/svgs/polygon.svg',
+    officialName: 'Mumbai',
+    currency: 'MATIC'
+  },
+  421611: {
+    name: 'arbitrum-rinkeby',
+    logo: '/svgs/arbitrum.svg',
+    officialName: 'Arbitrum',
+    currency: 'ArbETH'
+  },
+  69: {
+    name: 'optimism-kovan',
+    logo: '/svgs/optimism.svg',
+    officialName: 'Optimism',
+    currency: 'ETH'
+  },
+  4002: {
+    name: 'fantom-testnet',
+    logo: '/svgs/fantom.svg',
+    officialName: 'Fantom',
+    currency: 'FTM'
+  }
+}
+
 export const chains: { [key: number]: string } = {
   4: 'rinkeby',
   97: 'bsc-testnet',
