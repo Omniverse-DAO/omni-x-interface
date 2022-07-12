@@ -286,6 +286,8 @@ const SideBar: React.FC = () => {
         })
         await tx.wait()
       }
+
+      setConfirmTransfer(false)
     }
   }
 

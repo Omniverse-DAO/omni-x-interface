@@ -58,19 +58,35 @@ const ConfirmTransfer: React.FC<IConfirmTransferProps> = ({
               <p className="my-4 text-center text-slate-500 text-lg leading-relaxed">
                 You are transferring this NFT:
               </p>
-              <div className="flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center">
                 <div style={{width: 250, height: 250, borderRadius: 20}}>
                   {
                     selectedNFTItem &&
-                      <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image"/>}>
-                        <img src={imageError ? '/images/omnix_logo_black_1.png' : image} alt="nft-image" onError={(e) => {
-                          setImageError(true)
-                        }} data-src={image}/>
-                      </LazyLoad>
+                      <>
+                        <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image"/>}>
+                          <img src={imageError ? '/images/omnix_logo_black_1.png' : image} alt="nft-image" onError={(e) => {
+                            setImageError(true)
+                          }} data-src={image}/>
+                        </LazyLoad>
+                      </>
                   }
                 </div>
+                {
+                  selectedNFTItem &&
+                    <>
+                      {
+                        selectedNFTItem.name !== '' &&
+                          <p className="mt-3 mb-1 text-md text-center text-slate-500 leading-relaxed">
+                            {selectedNFTItem.name}
+                          </p>
+                      }
+                      <p className="mt-1 mb-3 text-md text-center text-slate-500 leading-relaxed">
+                        {`#${selectedNFTItem.token_id}`}
+                      </p>
+                    </>
+                }
               </div>
-              <div className="flex items-center justify-around mt-5">
+              <div className="flex items-center justify-around mt-1">
                 <div className="flex flex-col">
                   <p>From:</p>
                   <div className="flex flex-col items-center p-2 bg-g-200 rounded-md border border-slate-100">
