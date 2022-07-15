@@ -1,4 +1,4 @@
-import React, {useRef, useLayoutEffect, useState} from 'react'
+import React, {useRef, useLayoutEffect, useState, useEffect} from 'react'
 import useWallet from '../hooks/useWallet'
 import { useSelector } from 'react-redux'
 import {selectUser, selectUserNFTs} from '../redux/reducers/userReducer'
@@ -11,12 +11,13 @@ import {
   getERC721Instance,
   getERC1155Instance,
   getOmnixBridge1155Instance,
-  getOmnixBridgeInstance
+  getOmnixBridgeInstance, validateContract
 } from '../utils/contracts'
 import {BigNumber, ethers} from 'ethers'
-import {getLayerzeroChainId} from '../utils/constants'
+import {getAddressByName, getLayerzeroChainId} from '../utils/constants'
 import {Dialog} from '@material-ui/core'
 import ConfirmTransfer from './bridge/ConfirmTransfer'
+import ConfirmUnwrap from './bridge/ConfirmUnwrap'
 
 interface RefObject {
   offsetHeight: number
@@ -56,6 +57,7 @@ const SideBar: React.FC = () => {
   const [dragEnd, setDragEnd] = useState(false)
   const [targetChain, setTargetChain] = useState(0)
   const [estimatedFee, setEstimatedFee] = useState(BigNumber.from('0'))
+  const [unwrap, setUnwrap] = useState(false)
   const {setNodeRef} = useDroppable({
     id: 'droppable',
     data: {
@@ -160,9 +162,9 @@ const SideBar: React.FC = () => {
     setFixed(!fixed)
   }
 
-  const onClickNetwork = async (networkIndex: number) => {
+  const onClickNetwork = async (chainId: number) => {
     await connectWallet()
-    await switchNetwork(networkIndex)
+    await switchNetwork(chainId)
   }
 
   const handleTargetChainChange = (networkIndex: number) => {
@@ -183,7 +185,7 @@ const SideBar: React.FC = () => {
 
       if (selectedNFTItem.contract_type === 'ERC721') {
         const contractInstance = getOmnixBridgeInstance(provider?._network?.chainId, signer)
-        const erc721Instance = getERC721Instance(selectedNFTItem.token_address, signer)
+        const erc721Instance = getERC721Instance(selectedNFTItem.token_address, 0, signer)
         const noSignerOmniXInstance = getOmnixBridgeInstance(targetChain, null)
         const dstAddress = await noSignerOmniXInstance.persistentAddresses(selectedNFTItem.token_address)
         let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
@@ -235,9 +237,36 @@ const SideBar: React.FC = () => {
 
       if (selectedNFTItem.contract_type === 'ERC721') {
         const contractInstance = getOmnixBridgeInstance(provider?._network?.chainId, signer)
-        const erc721Instance = getERC721Instance(selectedNFTItem.token_address, signer)
+        const erc721Instance = getERC721Instance(selectedNFTItem.token_address, 0, signer)
         const noSignerOmniXInstance = getOmnixBridgeInstance(targetChain, null)
         const dstAddress = await noSignerOmniXInstance.persistentAddresses(selectedNFTItem.token_address)
+
+        noSignerOmniXInstance.on('LzReceive', async (ercAddress, toAddress, tokenId, payload, persistentAddress) => {
+          console.log(selectedNFTItem)
+          console.log(ercAddress, toAddress, tokenId, payload, persistentAddress)
+          if (
+            parseInt(selectedNFTItem.token_id) === tokenId.toNumber() &&
+            _signerAddress === toAddress
+          ) {
+
+            const targetERC721Instance = getERC721Instance(ercAddress, targetChain, null)
+            const validate = await validateContract(targetChain, ercAddress)
+            if (validate) {
+              const isERC721 = await targetERC721Instance.supportsInterface('0x80ac58cd')
+              if (isERC721) {
+                const owner = await targetERC721Instance.ownerOf(tokenId.toNumber())
+                const bridgeAddress = getAddressByName('OmniX', targetChain)
+                console.log(owner)
+                console.log(bridgeAddress)
+                if (owner === bridgeAddress) {
+                  console.log('ercAddress', ercAddress)
+                  setUnwrap(true)
+                }
+              }
+            }
+          }
+        })
+
         let adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 3500000])
         if (dstAddress !== ethers.constants.AddressZero) {
           adapterParams = ethers.utils.solidityPack(['uint16', 'uint256'], [1, 2000000])
@@ -285,11 +314,54 @@ const SideBar: React.FC = () => {
           value: estimatedFee.nativeFee
         })
         await tx.wait()
+
+        noSignerOmniX1155Instance.on('LzReceive', async (ercAddress, toAddress, tokenId,/* amount,*/ payload, onftaddress) => {
+          if (
+            selectedNFTItem.token_address === ercAddress &&
+            selectedNFTItem.token_id === tokenId &&
+            _signerAddress === toAddress
+          ) {
+            const persistAddress = onftaddress
+            console.log('persistAddress', persistAddress)
+
+            const originAddress = await noSignerOmniX1155Instance.originAddresses(persistAddress)
+            if (originAddress !== ethers.constants.AddressZero) {
+              console.log('originAddress', originAddress)
+              setUnwrap(true)
+            }
+          }
+        })
       }
 
       setConfirmTransfer(false)
     }
   }
+
+  const onUnwrap = async () => {
+    await switchNetwork(targetChain)
+  }
+
+  useEffect(() => {
+    (async () => {
+      const ercAddress = '0x08a8Cf2c9aE7599811308F92EB9c1c58BB622C34'
+      const targetERC721Instance = getERC721Instance(ercAddress, 97, null)
+      const validate = await validateContract(97, ercAddress)
+      console.log(validate)
+      if (validate) {
+        console.log(targetERC721Instance)
+        const isERC721 = await targetERC721Instance.supportsInterface('0x80ac58cd')
+        console.log(isERC721)
+        const owner = await targetERC721Instance.ownerOf(1)
+        const bridgeAddress = getAddressByName('Omnix', 97)
+        console.log(owner)
+        console.log(bridgeAddress)
+        if (owner === bridgeAddress) {
+          console.log('ercAddress', ercAddress)
+          setUnwrap(true)
+        }
+      }
+    })()
+  }, [])
 
   const updateModal = (status: boolean) => {
     setConfirmTransfer(status)
@@ -719,6 +791,14 @@ const SideBar: React.FC = () => {
             senderChain={provider?._network?.chainId || 4}
             targetChain={targetChain}
             image={image}
+          />
+        </Dialog>
+      </div>
+      <div className="w-full md:w-auto">
+        <Dialog open={unwrap} onClose={() => setUnwrap(false)}>
+          <ConfirmUnwrap
+            updateModal={() => setUnwrap(false)}
+            onUnwrap={onUnwrap}
           />
         </Dialog>
       </div>

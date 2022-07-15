@@ -1,5 +1,5 @@
 import {ethers} from 'ethers'
-import {chains, getAddressByName, rpcProviders} from './constants'
+import {chains, getAddressByName, getProvider, rpcProviders} from './constants'
 import OmnixBridgeABI from '../constants/abis/OmnixBridge.json'
 import OmnixBridge1155ABI from '../constants/abis/OmnixBridge1155.json'
 import ERC721ABI from '../constants/abis/ERC721.json'
@@ -9,18 +9,11 @@ import LZEndpointABI from '../constants/abis/LayerzeroEndpoint.json'
 export const getOmnixBridgeInstance = (chainId: number, signer: any) => {
   const address = getAddressByName('Omnix', chainId)
   if (signer === null) {
-    const rpcURL = rpcProviders[chainId]
-    const _provider = new ethers.providers.JsonRpcProvider(
-      rpcURL,
-      {
-        name: chains[chainId],
-        chainId: chainId,
-      }
-    )
+    const provider = getProvider(chainId)
     return new ethers.Contract(
       address,
       OmnixBridgeABI,
-      _provider
+      provider
     )
   }
   return new ethers.Contract(
@@ -33,18 +26,11 @@ export const getOmnixBridgeInstance = (chainId: number, signer: any) => {
 export const getOmnixBridge1155Instance = (chainId: number, signer: any) => {
   const address = getAddressByName('Omnix1155', chainId)
   if (signer === null) {
-    const rpcURL = rpcProviders[chainId]
-    const _provider = new ethers.providers.JsonRpcProvider(
-      rpcURL,
-      {
-        name: chains[chainId],
-        chainId: chainId,
-      }
-    )
+    const provider = getProvider(chainId)
     return new ethers.Contract(
       address,
       OmnixBridge1155ABI,
-      _provider
+      provider
     )
   }
   return new ethers.Contract(
@@ -54,7 +40,15 @@ export const getOmnixBridge1155Instance = (chainId: number, signer: any) => {
   )
 }
 
-export const getERC721Instance = (contractAddress: string, signer: any) => {
+export const getERC721Instance = (contractAddress: string, chainId: number, signer: any) => {
+  if (signer === null) {
+    const provider = getProvider(chainId)
+    return new ethers.Contract(
+      contractAddress,
+      ERC721ABI,
+      provider
+    )
+  }
   return new ethers.Contract(
     contractAddress,
     ERC721ABI,
@@ -77,4 +71,12 @@ export const getLayerZeroEndpointInstance = (chainId: number, provider: any) => 
     LZEndpointABI,
     provider
   )
+}
+
+export const validateContract = async (chainId: number, address: string): Promise<boolean> => {
+  const provider = getProvider(chainId)
+  const bytecode = await provider.getCode(address)
+
+  // No code : "0x" then functionA is definitely not there
+  return bytecode.length > 2
 }
