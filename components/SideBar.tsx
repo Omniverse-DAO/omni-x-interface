@@ -23,6 +23,16 @@ interface RefObject {
   offsetHeight: number
 }
 
+type UnwrapInfo = {
+  type: 'ERC721' | 'ERC1155',
+  chainId: number,
+  originAddress: string,
+  persistentAddress: string,
+  tokenId: number
+}
+
+const env = process.env.NEXT_PUBLICE_ENVIRONMENT || 'testnet'
+
 const SideBar: React.FC = () => {
   const {
     provider,
@@ -57,7 +67,14 @@ const SideBar: React.FC = () => {
   const [dragEnd, setDragEnd] = useState(false)
   const [targetChain, setTargetChain] = useState(0)
   const [estimatedFee, setEstimatedFee] = useState(BigNumber.from('0'))
-  const [unwrap, setUnwrap] = useState(false)
+  const [unwrap, setUnwrap] = useState(true)
+  const [unwrapInfo, setUnwrapInfo] = useState<UnwrapInfo | null>({
+    type: 'ERC721',
+    chainId: 97,
+    originAddress: '0x1094881f1b536216cf88911C6b302E449E86307a',
+    persistentAddress: '0x0Ee3b951A5737c341229165a87D1aeb114391b88',
+    tokenId: 1
+  })
   const {setNodeRef} = useDroppable({
     id: 'droppable',
     data: {
@@ -256,11 +273,23 @@ const SideBar: React.FC = () => {
               if (isERC721) {
                 const owner = await targetERC721Instance.ownerOf(tokenId.toNumber())
                 const bridgeAddress = getAddressByName('OmniX', targetChain)
-                console.log(owner)
-                console.log(bridgeAddress)
                 if (owner === bridgeAddress) {
-                  console.log('ercAddress', ercAddress)
+                  setUnwrapInfo({
+                    type: 'ERC721',
+                    chainId: targetChain,
+                    originAddress: ercAddress,
+                    persistentAddress: persistentAddress,
+                    tokenId: tokenId.toNumber(),
+                  })
+                  console.log({
+                    type: 'ERC721',
+                    chainId: targetChain,
+                    originAddress: ercAddress,
+                    persistentAddress: persistentAddress,
+                    tokenId: tokenId.toNumber(),
+                  })
                   setUnwrap(true)
+                  await switchNetwork(targetChain)
                 }
               }
             }
@@ -338,30 +367,48 @@ const SideBar: React.FC = () => {
   }
 
   const onUnwrap = async () => {
-    await switchNetwork(targetChain)
+    if (provider?._network?.chainId && unwrapInfo !== null) {
+      try {
+        const contractInstance = getOmnixBridgeInstance(provider?._network?.chainId, signer)
+        const erc721Instance = getERC721Instance(unwrapInfo.persistentAddress, 0, signer)
+        const operator = await erc721Instance.getApproved(BigNumber.from(unwrapInfo.tokenId))
+        if (operator !== contractInstance.address) {
+          await (await erc721Instance.approve(contractInstance.address, BigNumber.from(unwrapInfo.tokenId))).wait()
+        }
+        console.log(unwrapInfo)
+        console.log(await contractInstance.originAddresses(unwrapInfo.persistentAddress))
+        const tx = await contractInstance.withdraw(unwrapInfo.persistentAddress, unwrapInfo.tokenId)
+        console.log(tx)
+        await tx.wait()
+
+        setUnwrap(false)
+      } catch (e: any) {
+        console.log(e)
+      }
+    }
   }
 
-  useEffect(() => {
-    (async () => {
-      const ercAddress = '0x08a8Cf2c9aE7599811308F92EB9c1c58BB622C34'
-      const targetERC721Instance = getERC721Instance(ercAddress, 97, null)
-      const validate = await validateContract(97, ercAddress)
-      console.log(validate)
-      if (validate) {
-        console.log(targetERC721Instance)
-        const isERC721 = await targetERC721Instance.supportsInterface('0x80ac58cd')
-        console.log(isERC721)
-        const owner = await targetERC721Instance.ownerOf(1)
-        const bridgeAddress = getAddressByName('Omnix', 97)
-        console.log(owner)
-        console.log(bridgeAddress)
-        if (owner === bridgeAddress) {
-          console.log('ercAddress', ercAddress)
-          setUnwrap(true)
-        }
-      }
-    })()
-  }, [])
+  // useEffect(() => {
+  //   (async () => {
+  //     const ercAddress = '0x08a8Cf2c9aE7599811308F92EB9c1c58BB622C34'
+  //     const targetERC721Instance = getERC721Instance(ercAddress, 97, null)
+  //     const validate = await validateContract(97, ercAddress)
+  //     console.log(validate)
+  //     if (validate) {
+  //       console.log(targetERC721Instance)
+  //       const isERC721 = await targetERC721Instance.supportsInterface('0x80ac58cd')
+  //       console.log(isERC721)
+  //       const owner = await targetERC721Instance.ownerOf(1)
+  //       const bridgeAddress = getAddressByName('Omnix', 97)
+  //       console.log(owner)
+  //       console.log(bridgeAddress)
+  //       if (owner === bridgeAddress) {
+  //         console.log('ercAddress', ercAddress)
+  //         setUnwrap(true)
+  //       }
+  //     }
+  //   })()
+  // }, [])
 
   const updateModal = (status: boolean) => {
     setConfirmTransfer(status)
@@ -463,7 +510,7 @@ const SideBar: React.FC = () => {
             { expandedMenu == 2 &&
               <ul className='flex flex-col w-full space-y-4 p-6 pl-[80px] pt-8 pb-0 text-g-600' ref={menu_ethereum}>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(0)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 4 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/ethereum.svg" width={24} height={28} />
                     </div>
@@ -471,7 +518,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(1)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 421611 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/arbitrum.svg" width={35} height={30} />
                     </div>
@@ -479,7 +526,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(2)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 43113 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/avax.svg" width={23} height={35} />
                     </div>
@@ -487,7 +534,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(3)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 97 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/binance.svg" width={29} height={30} />
                     </div>
@@ -495,7 +542,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(4)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 4002 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/fantom.svg" width={25} height={25} />
                     </div>
@@ -503,7 +550,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(5)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 69 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/optimism.svg" width={25} height={25} />
                     </div>
@@ -511,7 +558,7 @@ const SideBar: React.FC = () => {
                   </button>
                 </li>
                 <li className="w-full">
-                  <button className="flex flex-row" onClick={() => onClickNetwork(6)}>
+                  <button className="flex flex-row" onClick={() => onClickNetwork(env === 'testnet' ? 80001 : 1)}>
                     <div className="w-[36px] h-[36px] m-auto">
                       <img src="/svgs/polygon.svg" width={34} height={30} />
                     </div>

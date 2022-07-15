@@ -1,8 +1,9 @@
+import {ethers} from 'ethers'
 import OmnixBridge from '../constants/OmnixBridge.json'
 import OmnixBridge1155 from '../constants/OmnixBridge1155.json'
 import LZEndpoint from '../constants/LayerzeroEndpoints.json'
 import ChainIds from '../constants/chainIds.json'
-import {ethers} from 'ethers'
+import CHAINS from '../constants/chains.json'
 
 const omnixBridge: any = OmnixBridge
 const omnixBridge1155: any = OmnixBridge1155
@@ -104,4 +105,12 @@ export const getProvider = (chainId: number) => {
       chainId: chainId,
     }
   )
+}
+
+export const getChainInfo = (chainId: number) => {
+  const filter = CHAINS.filter((item) => item.chainId === chainId)
+  if (filter.length > 0) {
+    return filter[0]
+  }
+  return null
 }
