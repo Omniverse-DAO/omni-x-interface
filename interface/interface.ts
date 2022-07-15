@@ -14,16 +14,26 @@ export interface IPropsFeed {
 }
 
 export interface IPropsNFTItem {
-  nft: NFTItem
+  nft: NFTItem,
+  col_url?: string,
+  chain?: string
 }
 
 export interface NFTItem {
   name: string,
-  token_uri: string,
-  token_id: string,
-  token_address: string,
-  chain: string,
+  attributes: Object,
+  image: string,
+  custom_id: number,
+  token: string,
+  score: number,
+  rank: number,
+  token_id: number,
+  name1: string,
+  price: number,
   metadata: string,
+  chain: string,
+  token_address: string,
+  uri: string,
 }
 
 export interface FeedItem {
