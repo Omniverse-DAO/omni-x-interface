@@ -28,9 +28,16 @@ const getNFTInfo = async (col_url: string, token_id: string) => {
     return res.data
 }
 
+const getCollections = async () => {
+    const res = await API.get(`collections/all`)
+    return res.data
+}
+
+
 export const collectionsService = {
     getCollectionNFTs,
     getCollectionInfo,
     getCollectionOwners,
-    getNFTInfo
+    getNFTInfo,
+    getCollections,
 }

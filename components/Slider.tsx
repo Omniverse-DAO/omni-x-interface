@@ -35,7 +35,7 @@ const Slider = (props: IPropsSlider) => {
             >
               {props.images.map((item, index) => (
                 <SwiperSlide key={index} virtualIndex={index}>
-                  <Link href={'/collections/0x991A546A167cEb2a6a7C344C9D85269Ac03035D9?chain=eth'}><a>{item}</a></Link>
+                  {item}
                 </SwiperSlide>
               ))}
             </Swiper>

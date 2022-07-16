@@ -12,6 +12,7 @@ export const collectionsSlice = createSlice({
 		nftInfo: {},
 		finishedGetting: false,
 		owners: 0,
+		collections: [],
 	},
 	reducers: {
 		setCollectionNFTs: (state, action) => {
@@ -32,12 +33,15 @@ export const collectionsSlice = createSlice({
 		},
 		setCollectionOwners: (state, action) => {
 			state.owners = action.payload === undefined ? 0 : action.payload.data
-		}
+		},
+		setCollections: (state, action) => {
+			state.collections = action.payload === undefined ? 0 : action.payload.data
+		},
 	}
 })
 
 //actions
-export const { setCollectionNFTs, setCollectionInfo, setNFTInfo, clearCollections, startGetNFTs, setCollectionOwners } = collectionsSlice.actions
+export const { setCollectionNFTs, setCollectionInfo, setNFTInfo, clearCollections, startGetNFTs, setCollectionOwners, setCollections } = collectionsSlice.actions
 
 export const clearCollectionNFTs = () => (dispatch: Dispatch<any>) => {
 	dispatch(clearCollections())
@@ -80,6 +84,15 @@ export const getNFTInfo = (col_url: string, token_id: string) => async (dispatch
 	}
 }
 
+export const getCollections = () => async (dispatch: Dispatch<any>) => {
+	try {
+		const info = await collectionsService.getCollections()
+		dispatch(setCollections(info))
+	} catch (error) {
+		console.log("getNFTInfo error ? ", error)
+	}
+}
+
 
 //selectors
 export const selectCollectionNFTs = (state: any) => state.collectionsState.nfts
@@ -87,5 +100,6 @@ export const selectCollectionInfo = (state: any) => state.collectionsState.info
 export const selectNFTInfo = (state: any) => state.collectionsState.nftInfo
 export const selectGetNFTs = (state: any) => state.collectionsState.finishedGetting
 export const selectCollectionOwners = (state: any) => state.collectionsState.owners
+export const selectCollections = (state: any) => state.collectionsState.collections
 
 export default collectionsSlice.reducer
