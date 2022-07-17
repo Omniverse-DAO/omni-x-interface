@@ -1,5 +1,5 @@
 import {ethers} from 'ethers'
-import {chains, getAddressByName, getProvider, rpcProviders} from './constants'
+import {getAddressByName, getProvider, rpcProviders} from './constants'
 import OmnixBridgeABI from '../constants/abis/OmnixBridge.json'
 import OmnixBridge1155ABI from '../constants/abis/OmnixBridge1155.json'
 import ERC721ABI from '../constants/abis/ERC721.json'

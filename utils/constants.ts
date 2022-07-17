@@ -15,8 +15,6 @@ const environments: any = {
   testnet: ['rinkeby', 'bsc-testnet', 'fuji', 'mumbai', 'arbitrum-rinkeby', 'optimism-kovan', 'fantom-testnet']
 }
 
-const environment = process.env.NEXT_PUBLICE_ENVIRONMENT || 'testnet'
-
 export const rpcProviders: { [key: number]: string } = {
   4: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
@@ -72,27 +70,35 @@ export const chainInfos: { [key: number]: { name: string; logo: string, official
   }
 }
 
-export const chains: { [key: number]: string } = {
-  4: 'rinkeby',
-  97: 'bsc-testnet',
-  43113: 'fuji',
-  80001: 'mumbai',
-  421611: 'arbitrum-rinkeby',
-  69: 'optimism-kovan',
-  4002: 'fantom-testnet'
-}
-
 export const getLayerzeroChainId = (chainId: number): number => {
-  return chainIds[chains[chainId]]
+  return chainIds[chainInfos[chainId].name]
 }
 
-export const getAddressByName = (name: string, chainId: number) => {
+export const chain_list: {[key: string]: number} = {
+  'eth': 1,
+  'bsc': 56,
+  'matic': 137,
+  'avalanche': 43114,
+  'fantom': 250,
+  'optimism': 10,
+  'arbitrum': 42161,
+  'bsc testnet': 97,
+  'rinkeby': 4,
+  'mumbai': 80001,
+  'avalanche testnet': 43113
+}
+
+export const getChainIdFromName = (name: string): number => {
+  return chain_list[name]
+}
+
+export const getAddressByName = (name: 'Omnix' | 'Omnix1155' | 'LayerZeroEndpoint', chainId: number) => {
   if (name === 'Omnix') {
-    return omnixBridge[chains[chainId]]
+    return omnixBridge[chainInfos[chainId].name]
   } else if (name === 'Omnix1155') {
-    return omnixBridge1155[chains[chainId]]
+    return omnixBridge1155[chainInfos[chainId].name]
   } else if (name === 'LayerZeroEndpoint') {
-    return lzEndpoint[chains[chainId]]
+    return lzEndpoint[chainInfos[chainId].name]
   }
 }
 
@@ -101,7 +107,7 @@ export const getProvider = (chainId: number) => {
   return new ethers.providers.JsonRpcProvider(
     rpcURL,
     {
-      name: chains[chainId],
+      name: chainInfos[chainId].name,
       chainId: chainId,
     }
   )
