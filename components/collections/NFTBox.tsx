@@ -8,36 +8,16 @@ import LazyLoad from 'react-lazyload'
 import USD from '../../public/images/USD.png'
 
 
-const NFTBox = ({nft}: IPropsNFTItem) => {
-  const [chain, setChain] = useState('eth')
-  const [image, setImage] = useState('/images/omnix_logo_black_1.png')
+const NFTBox = ({nft, col_url, chain}: IPropsNFTItem) => {
   const [imageError, setImageError] = useState(false)
-
-  useEffect(() => {
-    const updateImage = async() => {
-      const metadata = nft.metadata
-      setChain(chain_list[nft.chain])
-      if (metadata) {
-        try {
-          // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
-          const image_uri = JSON.parse(metadata).image
-          setImage(image_uri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
-        } catch (err) {
-          console.log('NFTBox err? ', err)
-        }
-      }
-    }
-
-    updateImage()
-  }, [])
 
   return (
     <div className="w-full">
-      <Link href={`/collections/${nft.token_address}/${nft.token_id}`}>
+      <Link href={`/collections/${col_url}/${nft.token_id}`}>
         <a>
           <div>
             <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image" />}>
-              <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
+              <img src={imageError||nft.image==null?'/images/omnix_logo_black_1.png':nft.image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={nft.image} />
             </LazyLoad>
           </div>
           <div className="text-[#6C757D] text-sm mt-3 px-3">
@@ -46,11 +26,11 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
           <div className="my-3 px-3">
             <div className="columns-2">
               <div className="flex items-center">
-                <Image src={USD} height={18} width={18} alt="" />
-                <span className="text-[#1E1C21] text-sm ml-2"> 85.6k</span>
+                <img src="/svgs/ethereum.svg" className="w-[18px] h-[18px]" />
+                <span className="text-[#1E1C21] text-sm ml-2"> {nft.price}</span>
               </div>
               <div className="flex items-center flex-row-reverse">
-                {chain === 'eth' &&
+                {(chain === 'eth' || chain === 'rinkeby') &&
                   <img src="/svgs/ethereum.svg" className="w-[16px] h-[16px]" />
                 }
                 {chain === 'bsc' &&
@@ -71,7 +51,7 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
                 {chain === 'arbitrum' &&
                   <img src="/svgs/arbitrum.svg" className="w-[16px] h-[16px]" />
                 }
-                <span className="text-[#6C757D] text-sm mr-2">chain : </span>
+                <span className="text-[#6C757D] text-sm mr-2">Chain : </span>
               </div>
             </div>
           </div>
