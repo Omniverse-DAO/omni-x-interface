@@ -28,7 +28,7 @@ export interface NFTItem {
   token: string,
   score: number,
   rank: number,
-  token_id: number,
+  token_id: string,
   name1: string,
   price: number,
   metadata: string,

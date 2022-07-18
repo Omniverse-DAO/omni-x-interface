@@ -1,24 +1,12 @@
-import React, {useState} from 'react'
-import useWallet from '../../hooks/useWallet'
-import LazyLoad from 'react-lazyload'
-import {chainInfos} from '../../utils/constants'
-import {ethers} from 'ethers'
+import React from 'react'
 
 interface IConfirmUnwrapProps {
-  updateModal: (status: boolean) => void,
-  onUnwrap: () => void
+  updateModal: (status: boolean) => void
 }
 
 const ConfirmUnwrap: React.FC<IConfirmUnwrapProps> = ({
   updateModal,
-  onUnwrap
 }) => {
-  const {
-    provider,
-    signer
-  } = useWallet()
-
-  const [imageError, setImageError] = useState(false)
 
   return (
     <>
@@ -55,16 +43,6 @@ const ConfirmUnwrap: React.FC<IConfirmUnwrapProps> = ({
                 <br />
                 Please confirm the wallet transaction to unwrap your NFT (back to its original form) and complete the transfer.
               </p>
-            </div>
-            {/*footer*/}
-            <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
-              <button
-                className="text-left bg-p-400 rounded-md px-6 py-3 text-white hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ease-linear active transition-all duration-150"
-                type="button"
-                onClick={() => onUnwrap()}
-              >
-                Unwrap
-              </button>
             </div>
           </div>
         </div>
