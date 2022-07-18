@@ -76,6 +76,9 @@ module.exports = {
         lg: '16px',
         xl: '20px',
       },
+      gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
+      }
     },
   },
   plugins: [require('@tailwindcss/forms')],

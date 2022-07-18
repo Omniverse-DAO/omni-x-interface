@@ -3,33 +3,38 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { chain_list } from '../utils/utils'
 import Round from '../public/images/round-refresh.png'
-import eth from '../public/svgs/ethereum.svg'
-import bsc from '../public/svgs/binance.svg'
-import matic from '../public/svgs/polygon.svg'
-import avalanche from '../public/svgs/avax.svg'
-import fantom from '../public/svgs/fantom.svg'
-import optimism from '../public/svgs/optimism.svg'
-import arbitrum from '../public/svgs/arbitrum.svg'
 import { NFTItem, IPropsNFTItem } from '../interface/interface'
+import LazyLoad from 'react-lazyload'
+import {useDraggable} from '@dnd-kit/core'
 
-const NFTBox = ({nft}: IPropsNFTItem) => {
+const NFTBox = ({nft, index}: IPropsNFTItem) => {
 
   const [chain, setChain] = useState('eth')
-  const [image, setImage] = useState('/images/image 29.png')
+  const [image, setImage] = useState('/images/omnix_logo_black_1.png')
+  const [imageError, setImageError] = useState(false)
+
+  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    id: `draggable-${index}`,
+    data: {
+      type: 'NFT',
+    }
+  })
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    zIndex: 99
+  } : undefined
 
   useEffect(() => {
     const updateImage = async() => {
-      const tokenURI = nft.token_uri
+      const metadata = nft.metadata
       setChain(chain_list[nft.chain])
-      if (tokenURI) {
+      if (metadata) {
         try {
           // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
-          const requestURL = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
-          const tokenURIResponse = await (await fetch(requestURL)).json()
-          const imageURI = tokenURIResponse.image
-          setImage(imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+          const image_uri = JSON.parse(metadata).image
+          setImage(image_uri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
         } catch (err) {
-          console.log(err)
+          console.log('NFTBox err? ', err)
         }
       }
     }
@@ -38,9 +43,11 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
   }, [])
 
   return (
-  	<div className="">
-      <div className="nft-image-container">
-        <img src={image} alt="nft-image" />
+  	<div >
+      <div className="nft-image-container" ref={setNodeRef} style={style} {...listeners} {...attributes}>
+        <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image" />}>
+          <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
+        </LazyLoad>
       </div>
       <div className="flex flex-row pt-2 justify-start">
         <div className="ml-1 text-[#6C757D] text-[12px] font-[500]">
@@ -63,25 +70,25 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
           <span>chain:</span>
           <div className="flex items-center ml-1">
             {chain === 'eth' &&
-              <Image src={eth} alt="eth" width={16} height={16}/>
+              <img src="/svgs/ethereum.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'bsc' &&
-              <Image src={bsc} alt="bsc" width={16} height={16}/>
+              <img src="/svgs/binance.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'matic' &&
-              <Image src={matic} alt="matic" width={16} height={16}/>
+              <img src="/svgs/polygon.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'avalanche' &&
-              <Image src={avalanche} alt="avalanche" width={16} height={16}/>
+              <img src="/svgs/avax.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'fantom' &&
-              <Image src={fantom} alt="fantom" width={16} height={16}/>
+              <img src="/svgs/fantom.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'optimism' &&
-              <Image src={optimism} alt="optimism" width={16} height={16}/>
+              <img src="/svgs/optimism.svg" className="w-[16px] h-[16px]" />
             }
             {chain === 'arbitrum' &&
-              <Image src={arbitrum} alt="arbitrum" width={16} height={16}/>
+              <img src="/svgs/arbitrum.svg" className="w-[16px] h-[16px]" />
             }
           </div>
         </div>

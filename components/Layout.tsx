@@ -9,6 +9,8 @@ import useWallet  from '../hooks/useWallet'
 import SnackbarComponent from './SnackBar'
 import Banner from './Banner'
 import default_slides from '../utils/defaultSlides'
+import Link from 'next/link'
+
 type LayoutProps = {
   children?: React.ReactNode
 }
@@ -25,6 +27,8 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   const [isBlur, setIsBlur] = useState<boolean>(false)
   const [currentSlides, setCurrentSlides] = useState(default_slides)
   const user = useSelector(selectUser)
+
+  const [collectionMenu, setCollectionMenu] = useState<boolean>(false)
   
   const dispatch = useDispatch()
 
@@ -35,8 +39,12 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   }, [address, updatingUser, dispatch])
 
   useEffect(() => {
-    if ( router.pathname === '/market' ) {
-      setMenu('market')
+    setCollectionMenu(false)
+    if ( router.pathname.includes('/collections')) {
+      setMenu('collections')
+      if ( router.pathname == '/collections' ) {
+        setCollectionMenu(true)
+      }
     } else if ( router.pathname === '/analytics' ) {
       setMenu('analytics')
     } else if ( router.pathname === '/' ) {
@@ -53,19 +61,19 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
   useEffect(() => {
     if ( menu === 'home' && user.banners && user.banners.length == 3 ) {
       const new_slides:Array<React.ReactNode> = []
-      new_slides.push(<img src={process.env.API_URL + user.banners[0]} alt="banner - 1" />)
-      new_slides.push(<img src={process.env.API_URL + user.banners[1]} alt="banner - 2" />)
-      new_slides.push(<img src={process.env.API_URL + user.banners[2]} alt="banner - 3" />)
+      new_slides.push(<img src={process.env.API_URL + user.banners[0]} alt="banner - 1" className={'banner-slider'} />)
+      new_slides.push(<img src={process.env.API_URL + user.banners[1]} alt="banner - 2" className={'banner-slider'} />)
+      new_slides.push(<img src={process.env.API_URL + user.banners[2]} alt="banner - 3" className={'banner-slider'} />)
       setCurrentSlides(new_slides)
     }
   }, [menu, user.banners])
 
   useEffect(() => {
-    if ( menu === 'market' ) {
+    if ( menu === 'collections' ) {
       const new_slides:Array<React.ReactNode> = []
-      new_slides.push(<img src='/images/banner-4.png' alt="banner - 1" />)
-      new_slides.push(<img src='/images/banner-5.png' alt="banner - 2" />)
-      new_slides.push(<img src='/images/banner-6.png' alt="banner - 3" />)
+      new_slides.push(<Link href={'/collections/azuki_god'}><a><img src='/images/banner-4.png' alt="banner - 1" className={'banner-slider'} /></a></Link>)
+      new_slides.push(<Link href={'/collections/mmlmt7'}><a><img src='/images/banner-6.png' alt="banner - 3" className={'banner-slider'} /></a></Link>)
+      new_slides.push(<Link href={'/collections/gregs_eth_test'}><a><img src='/images/banner-5.png' alt="banner - 2" className={'banner-slider'} /></a></Link>)
       setCurrentSlides(new_slides)
     } else if ( menu === 'home' ) {
       const new_slides:Array<React.ReactNode> = []
@@ -82,7 +90,6 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
     }
   }, [menu])
 
-
   return (
     <>
       <Head>
@@ -95,8 +102,8 @@ const Layout: React.FC = ({ children }: LayoutProps) => {
       <SnackbarComponent />
       <main className='w-full flex flex-col'>
         <SideBar />
-        <Header menu={menu} />
-        <div className={menu==='home'||menu==='market'?'':'hidden'}>
+        <Header menu={menu}/>
+        <div className={menu==='home'||(menu==='collections'&&collectionMenu)?'':'hidden'}>
           <Banner slides={currentSlides} blur={isBlur} menu={menu} />
         </div>
         {children}

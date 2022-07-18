@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 //reducers
 export const snackBarSlice = createSlice({
@@ -10,23 +10,23 @@ export const snackBarSlice = createSlice({
     },
     reducers: {
         openSnackBar: (state, action) => {
-            state.opened = true;
-            state.message = action.payload.message;
-            state.status = action.payload.status;
+            state.opened = true
+            state.message = action.payload.message
+            state.status = action.payload.status
         },
         closeSnackBar: (state) => {
-            state.opened = false;
+            state.opened = false
         },
     }
-});
+})
 
 
 //actions
-export const { openSnackBar, closeSnackBar } = snackBarSlice.actions;
+export const { openSnackBar, closeSnackBar } = snackBarSlice.actions
 
 //selectors
-export const selectSnackState = (state: any) => state.snackBarState.opened;
-export const selectSnackStatus = (state: any) => state.snackBarState.status;
-export const selectSnackMessage = (state: any) => state.snackBarState.message;
+export const selectSnackState = (state: any) => state.snackBarState.opened
+export const selectSnackStatus = (state: any) => state.snackBarState.status
+export const selectSnackMessage = (state: any) => state.snackBarState.message
 
-export default snackBarSlice.reducer;
+export default snackBarSlice.reducer
