@@ -262,7 +262,7 @@ const SideBar: React.FC = () => {
           console.log(ercAddress, toAddress, tokenId, payload, persistentAddress)
           await switchNetwork(targetChain)
           if (
-            selectedNFTItem.token_id === tokenId.toNumber() &&
+            parseInt(selectedNFTItem.token_id.toString()) === tokenId.toNumber() &&
             _signerAddress === toAddress
           ) {
 
