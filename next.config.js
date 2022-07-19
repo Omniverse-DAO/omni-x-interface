@@ -1,9 +1,11 @@
 module.exports = {
   env: {
-    API_BASE_URL: 'http://18.212.21.171/api/v1/',
-    API_URL: 'http://18.212.21.171/'
+    API_BASE_URL: 'http://34.227.14.254/api/v1/',
+    API_URL: 'http://34.227.14.254/'
   },
   images: {
-    domains: ['localhost', '18.212.21.171']
+    domains: ['localhost', '34.227.14.254'],
+    loader: 'akamai',
+    path: ''
   }
 }

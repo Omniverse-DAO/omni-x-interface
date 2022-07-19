@@ -43,8 +43,6 @@ const Collections: NextPage = () => {
     dispatch(getCollections() as any)
   }, [])
 
-  console.log(collections)
-
   useEffect(() => {
     const slides: Array<React.ReactNode> = []
 
