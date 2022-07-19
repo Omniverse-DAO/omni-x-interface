@@ -9,7 +9,7 @@ const NFTGrid = ({ nfts }: IPropsImage) => {
         <div className="grid grid-cols-5 gap-10">
           {nfts.map((item, index) => {
             return (
-              <NFTBox nft={item} key={index} />
+              <NFTBox nft={item} index={index} key={index} />
             )
           })}
         </div>

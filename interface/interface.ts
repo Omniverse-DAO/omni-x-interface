@@ -16,7 +16,8 @@ export interface IPropsFeed {
 export interface IPropsNFTItem {
   nft: NFTItem,
   col_url?: string,
-  chain?: string
+  chain?: string,
+  index: number
 }
 
 export interface NFTItem {
@@ -31,6 +32,9 @@ export interface NFTItem {
   name1: string,
   price: number,
   metadata: string,
+  token_uri: string,
+  amount: string,
+  contract_type: string,
   chain: string,
   token_address: string,
   uri: string,
@@ -49,4 +53,8 @@ export interface FeedItem {
     content: string
     percent: number
   }
+}
+
+export const ItemTypes = {
+  NFTBox: 'nftbox'
 }

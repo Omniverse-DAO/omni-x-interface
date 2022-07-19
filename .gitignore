@@ -36,4 +36,5 @@ yarn-error.log*
 
 package-lock.json
 .eslintrc.local.js
+/.idea
 yarn.lock
