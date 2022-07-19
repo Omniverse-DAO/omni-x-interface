@@ -18,9 +18,8 @@ import domains from '../../public/images/domains.png'
 import fashion from '../../public/images/fashion.png'
 
 
-// import ImageList from '../../components/ImageList'
+import ImageList from '../../components/ImageList'
 import Slider from '../../components/Slider'
-
 
 const serviceSlides: Array<React.ReactNode> = []
 serviceSlides.push(<Image src={pfp} alt="image - 25" layout='responsive' width={230} height={263} />)
@@ -43,8 +42,6 @@ const Collections: NextPage = () => {
   useEffect(() => {
     dispatch(getCollections() as any)
   }, [])
-
-  console.log(collections)
 
   useEffect(() => {
     const slides: Array<React.ReactNode> = []

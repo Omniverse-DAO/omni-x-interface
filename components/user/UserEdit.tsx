@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateUser, getUser, selectUser } from '../../redux/reducers/userReducer'
 import classNames from '../../helpers/classNames'
 import editStyle from '../../styles/useredit.module.scss'
-//import svg
 import UserSVG from '../../public/svgs/user.svg'
 import AlertSVG from '../../public/svgs/alert.svg'
 import PaymentSVG from '../../public/svgs/payment.svg'
@@ -28,8 +27,6 @@ import EthIMG from '../../public/images/payment/eth.png'
 import OmniIMG from '../../public/images/payment/omni.png'
 import UsdcIMG from '../../public/images/payment/usdc.png'
 import UsdtIMG from '../../public/images/payment/usdt.png'
-import BelowArrow from '../../public/images/payment/belowArrow.png'
-
 interface IUserEditProps {
   updateModal: (arg: string) => void
 }
@@ -51,8 +48,9 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+  const [coinNFTID, handleNFTCoin] = useState('0')
+  const [coinTokenID, handleTokenCoin] = useState('0')
 
-  const [coinID, handleCoin] = useState('0')
 
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
@@ -534,6 +532,26 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                   </div>
                 </div>
                 <div className='flex flex-row my-4'>
+                  <div className='w-[22px]'></div>
+                  <div className={editStyle.tokenOption}>
+                    <div className={editStyle.chainIcon}>
+                      {coinTokenID==='0' &&  <Image src={OmniIMG} alt='Omni logo'/>}
+                      {coinTokenID==='1' &&  <Image src={UsdcIMG} alt='Usdc logo'/>}
+                      {coinTokenID==='2' &&  <Image src={UsdtIMG} alt='Usdt logo'/>}
+                      {coinTokenID==='3' &&  <Image src={EthIMG} alt='Eth logo'/>}
+                    </div>
+                    <select onChange={(e) => {
+                      handleTokenCoin(e.target.value)
+                    }}>
+                      <option value={'0'}>OMNI</option>
+                      <option value={'1'}>USDC</option>
+                      <option value={'2'}>USDT</option>
+                      <option value={'3'}>ETH</option>
+                    </select>
+                  </div>
+
+                </div>
+                <div className='flex flex-row my-4'>
                   <div className="flex items-center">
                     <input className="bg-[#FEFEFF] text-[#B444F9] w-[22px] h-[23px] rounded border-2 border-[#ADB5BD]" type="checkbox"/>
                   </div>
@@ -546,13 +564,13 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                   <div className='w-[22px]'></div>
                   <div className={editStyle.tokenOption}>
                     <div className={editStyle.chainIcon}>
-                      {coinID==='0' &&  <Image src={OmniIMG} alt='Omni logo'/>}
-                      {coinID==='1' &&  <Image src={UsdcIMG} alt='Usdc logo'/>}
-                      {coinID==='2' &&  <Image src={UsdtIMG} alt='Usdt logo'/>}
-                      {coinID==='3' &&  <Image src={EthIMG} alt='Eth logo'/>}
+                      {coinNFTID==='0' &&  <Image src={OmniIMG} alt='Omni logo'/>}
+                      {coinNFTID==='1' &&  <Image src={UsdcIMG} alt='Usdc logo'/>}
+                      {coinNFTID==='2' &&  <Image src={UsdtIMG} alt='Usdt logo'/>}
+                      {coinNFTID==='3' &&  <Image src={EthIMG} alt='Eth logo'/>}
                     </div>
                     <select onChange={(e) => {
-                      handleCoin(e.target.value)
+                      handleNFTCoin(e.target.value)
                     }}>
                       <option value={'0'}>OMNI</option>
                       <option value={'1'}>USDC</option>

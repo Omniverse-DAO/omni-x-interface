@@ -5,14 +5,24 @@ import { chain_list } from '../utils/utils'
 import Round from '../public/images/round-refresh.png'
 import { NFTItem, IPropsNFTItem } from '../interface/interface'
 import LazyLoad from 'react-lazyload'
-import logo_black from '../public/images/omnix_logo_black_1.png'
+import {useDraggable} from '@dnd-kit/core'
 
-
-const NFTBox = ({nft}: IPropsNFTItem) => {
+const NFTBox = ({nft, index}: IPropsNFTItem) => {
 
   const [chain, setChain] = useState('eth')
   const [image, setImage] = useState('/images/omnix_logo_black_1.png')
   const [imageError, setImageError] = useState(false)
+
+  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    id: `draggable-${index}`,
+    data: {
+      type: 'NFT',
+    }
+  })
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    zIndex: 99
+  } : undefined
 
   useEffect(() => {
     const updateImage = async() => {
@@ -33,10 +43,10 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
   }, [])
 
   return (
-  	<div className="">
-      <div className="nft-image-container">
-        <LazyLoad placeholder={<Image src={logo_black} alt="nft-image" />}>
-          <Image src={imageError?logo_black:logo_black} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
+  	<div >
+      <div className="nft-image-container" ref={setNodeRef} style={style} {...listeners} {...attributes}>
+        <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image" />}>
+          <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
         </LazyLoad>
       </div>
       <div className="flex flex-row pt-2 justify-start">

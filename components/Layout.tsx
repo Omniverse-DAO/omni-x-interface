@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import Image from 'next/image'
 import Head from 'next/head'
 import Header from './Header'
 import { useRouter } from 'next/router'

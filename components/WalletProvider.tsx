@@ -3,7 +3,7 @@ import { ethers, Signer } from 'ethers'
 import Web3Modal, { IProviderOptions, providers } from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import WalletLink from 'walletlink'
-import { getChainInfo } from '../helpers/constant'
+import { getChainInfo } from '../utils/constants'
 import { WalletContext } from '../contexts/wallet'
 
 const cachedLookupAddress = new Map<string, string | undefined>()
@@ -85,8 +85,8 @@ export const WalletProvider = ({
     }
   }, [web3Modal, handleAccountsChanged])
 
-  const switchNetwork = useCallback(async (chainIndex: number) => {
-    const chainInfo = getChainInfo(chainIndex)
+  const switchNetwork = useCallback(async (chainId: number) => {
+    const chainInfo = getChainInfo(chainId)
     const CHAIN_ID = chainInfo?.chainId || 4
     if (window.ethereum) {
       if (window.ethereum.networkVersion !== 4) {
@@ -167,7 +167,7 @@ export const WalletProvider = ({
       const instance = await web3Modal.connectTo(cachedProviderName)
       if (!instance) return
       instance.on('accountsChanged', handleAccountsChanged)
-      const provider = new ethers.providers.Web3Provider(instance)
+      const provider = new ethers.providers.Web3Provider(instance, 'any')
       const signer = provider.getSigner()
       setProvider(provider)
       setSigner(signer)

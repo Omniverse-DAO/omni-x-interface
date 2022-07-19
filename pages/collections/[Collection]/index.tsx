@@ -31,7 +31,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import Chip from '@material-ui/core/Chip'
 import classNames from '../../../helpers/classNames'
 import editStyle from '../../../styles/collection.module.scss'
-import logo_black from '../../public/image/omnix_logo_black_1.png'
+import { info } from 'console'
 
 const sort_fields = [
   { id: 1, name: 'price: low to high', value: 'price', unavailable: false },
@@ -525,7 +525,7 @@ const Collection: NextPage = () => {
                   <div className="grid 2xl:grid-cols-5 gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
                     { nfts.map((item, index) => {
                       return (
-                        <NFTBox nft={item} key={index} col_url={col_url} chain={collectionInfo?collectionInfo.chain:'eth'}/>
+                        <NFTBox nft={item} index={index} key={index} col_url={col_url} chain={collectionInfo?collectionInfo.chain:'eth'}/>
                       )
                     })}
                   </div>
