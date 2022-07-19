@@ -1,10 +1,12 @@
 module.exports = {
   env: {
-    API_BASE_URL: 'http://18.212.21.171/api/v1/',
-    API_URL: 'http://18.212.21.171/'
+    API_BASE_URL: 'https://omni-x-api.herokuapp.com/api/v1/',
+    API_URL: 'https://omni-x-api.herokuapp.com/'
 
   },
   images: {
-    domains: ['localhost', '18.212.21.171']
+    domains: ['localhost', 'omni-x-api.herokuapp.com'],
+    loader: 'akamai',
+    path: '',
   }
 }

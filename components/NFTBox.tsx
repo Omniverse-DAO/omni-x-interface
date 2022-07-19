@@ -5,6 +5,7 @@ import { chain_list } from '../utils/utils'
 import Round from '../public/images/round-refresh.png'
 import { NFTItem, IPropsNFTItem } from '../interface/interface'
 import LazyLoad from 'react-lazyload'
+import logo_black from '../public/images/omnix_logo_black_1.png'
 
 
 const NFTBox = ({nft}: IPropsNFTItem) => {
@@ -34,8 +35,8 @@ const NFTBox = ({nft}: IPropsNFTItem) => {
   return (
   	<div className="">
       <div className="nft-image-container">
-        <LazyLoad placeholder={<img src={'/images/omnix_logo_black_1.png'} alt="nft-image" />}>
-          <img src={imageError?'/images/omnix_logo_black_1.png':image} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
+        <LazyLoad placeholder={<Image src={logo_black} alt="nft-image" />}>
+          <Image src={imageError?logo_black:logo_black} alt="nft-image" onError={(e)=>{setImageError(true)}} data-src={image} />
         </LazyLoad>
       </div>
       <div className="flex flex-row pt-2 justify-start">

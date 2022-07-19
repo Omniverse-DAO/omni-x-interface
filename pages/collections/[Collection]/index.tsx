@@ -31,7 +31,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import Chip from '@material-ui/core/Chip'
 import classNames from '../../../helpers/classNames'
 import editStyle from '../../../styles/collection.module.scss'
-import { info } from 'console'
+import logo_black from '../../public/image/omnix_logo_black_1.png'
 
 const sort_fields = [
   { id: 1, name: 'price: low to high', value: 'price', unavailable: false },

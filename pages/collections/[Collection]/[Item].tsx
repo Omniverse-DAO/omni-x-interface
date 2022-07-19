@@ -20,6 +20,7 @@ import PngIcon2 from '../../../public/images/collections/dbanner2.png'
 import PngIcon3 from '../../../public/images/collections/dbanner3.png'
 
 import image_25 from '../../../public/images/image 25.png'
+import logo_black from '../../public/image/omnix_logo_black_1.png'
 
 interface NFTMetaData {
   name: string,

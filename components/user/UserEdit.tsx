@@ -52,7 +52,7 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
 
-  const [coinID, handleCoin] = useState("0")
+  const [coinID, handleCoin] = useState('0')
 
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
@@ -543,30 +543,30 @@ const UserEdit: React.FC<IUserEditProps> = ({updateModal}) => {
                   </div>
                 </div>
                 <div className='flex flex-row my-4'>
-                  <div className="w-[22px]"></div>
+                  <div className='w-[22px]'></div>
                   <div className={editStyle.tokenOption}>
                     <div className={editStyle.chainIcon}>
-                      {coinID==="0" &&  <Image src={OmniIMG} alt="Omni logo"/>}
-                      {coinID==="1" &&  <Image src={UsdcIMG} alt="Usdc logo"/>}
-                      {coinID==="2" &&  <Image src={UsdtIMG} alt="Usdt logo"/>}
-                      {coinID==="3" &&  <Image src={EthIMG} alt="Eth logo"/>}
+                      {coinID==='0' &&  <Image src={OmniIMG} alt='Omni logo'/>}
+                      {coinID==='1' &&  <Image src={UsdcIMG} alt='Usdc logo'/>}
+                      {coinID==='2' &&  <Image src={UsdtIMG} alt='Usdt logo'/>}
+                      {coinID==='3' &&  <Image src={EthIMG} alt='Eth logo'/>}
                     </div>
-                    <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={(e) => {
-                      handleCoin(e.target.value);
+                    <select onChange={(e) => {
+                      handleCoin(e.target.value)
                     }}>
-                      <option value={"0"} selected>OMNI</option>
-                      <option value={"1"}>USDC</option>
-                      <option value={"2"}>USDT</option>
-                      <option value={"3"}>ETH</option>
+                      <option value={'0'}>OMNI</option>
+                      <option value={'1'}>USDC</option>
+                      <option value={'2'}>USDT</option>
+                      <option value={'3'}>ETH</option>
                     </select>
                   </div>
 
                 </div>
               </div>
-              <div className="flex space-x-2 justify-end mb-5">
+              <div className='flex space-x-2 justify-end mb-5'>
                 <button
-                  type="submit"
-                  className="inline-block px-6 py-2.5 bg-[#ADB5BD] text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out absolute right-[1rem] bottom-[50px]"
+                  type='submit'
+                  className='inline-block px-6 py-2.5 bg-[#ADB5BD] text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out absolute right-[1rem] bottom-[50px]'
                 >
                   Save
                 </button>
