@@ -191,7 +191,9 @@ const SideBar: React.FC = () => {
     if (!signer) return
     if (!provider?._network?.chainId) return
     if (provider?._network?.chainId === targetChain) return
+    console.log(selectedNFTItem)
     const senderChainId = getChainIdFromName(selectedNFTItem.chain)
+    console.log(senderChainId)
     if (provider?._network?.chainId !== senderChainId) {
       dispatch(openSnackBar({ message: 'Successfully updated', status: 'success' }))
     }
