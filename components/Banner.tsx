@@ -1,4 +1,3 @@
-import { Carousel } from '3d-react-carousal'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,6 +10,7 @@ import { selectUser } from '../redux/reducers/userReducer'
 import UserEdit from './user/UserEdit'
 import Dialog from '@material-ui/core/Dialog'
 import { makeStyles } from '@material-ui/core/styles'
+import Carousel from './carousel'
 
 type BannerProps = {
   slides: Array<React.ReactNode>
@@ -47,7 +47,7 @@ const Banner = ({ slides, blur, menu }: BannerProps): JSX.Element => {
         )}
       >
         <div onMouseEnter={() => setShowSettingIcon(true)} onMouseLeave={() => setShowSettingIcon(false)}>
-          <Carousel slides={slides} autoplay={true} interval={3000} />
+          <Carousel slides={slides} />
         </div>
         {menu === 'home' && (
           <div className="flex justify-center w-full ">

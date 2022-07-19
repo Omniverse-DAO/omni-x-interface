@@ -4,6 +4,8 @@ module.exports = {
     API_URL: 'http://localhost:5000/'
   },
   images: {
-    domains: ['localhost', '35.171.17.51']
+    domains: ['localhost', '35.171.17.51'],
+    loader: 'akamai',
+    path: '',
   }
 }
