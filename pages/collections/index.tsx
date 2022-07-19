@@ -64,9 +64,9 @@ const Collections: NextPage = () => {
   return (
     <>
       <div>
-        <Slider title="Omniverse Certified" images={omniSlides} />
-        <Slider title="Trending Collection" images={omniSlides} />
-        <ImageList title="" images={serviceSlides} />
+        <Slider title="Beta Collections" images={omniSlides} />
+        {/* <Slider title="Trending Collection" images={omniSlides} /> */}
+        {/* <ImageList title="" images={serviceSlides} /> */}
       </div>
     </>
   )
