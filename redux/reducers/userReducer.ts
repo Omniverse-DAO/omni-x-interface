@@ -47,6 +47,7 @@ export const updateUser = (user: FormData) => async (dispatch: Dispatch<any>) =>
     dispatch(setUpdatingUser(true))
 
     try {
+        dispatch(openSnackBar({ message: 'Updating User Profile...', status: 'info' }))
         await userService.updateProfile(user)
         dispatch(setUpdatingUser(false))
         dispatch(setUser(user))
