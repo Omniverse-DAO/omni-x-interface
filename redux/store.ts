@@ -5,6 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 import userReducer from "./reducers/userReducer"
 import collectionsReducer from "./reducers/collectionsReducer"
 import snackBarReducer from "./reducers/snackBarReducer"
+import ordersReducer from "./reducers/ordersReducer"
 
 const bindMiddleware = (middleware: any) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -18,6 +19,7 @@ const combinedReducer = combineReducers({
   userState: userReducer,
   snackBarState: snackBarReducer,
   collectionsState: collectionsReducer,
+  ordersState: ordersReducer
 })
 
 const reducer = (state: any, action: any) => {
