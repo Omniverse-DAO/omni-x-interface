@@ -1,11 +1,17 @@
 import {ethers} from 'ethers'
 import OmnixBridge from '../constants/OmnixBridge.json'
+import OmnixExchange from '../constants/OmnixExchange.json'
 import OmnixBridge1155 from '../constants/OmnixBridge1155.json'
+import Strategy from '../constants/Strategy.json'
+import OFT from '../constants/OFT.json'
 import LZEndpoint from '../constants/LayerzeroEndpoints.json'
 import ChainIds from '../constants/chainIds.json'
 import CHAINS from '../constants/chains.json'
 
 const omnixBridge: any = OmnixBridge
+const omnixExchange: any = OmnixExchange
+const strategy: any = Strategy
+const oft: any = OFT
 const omnixBridge1155: any = OmnixBridge1155
 const lzEndpoint: any = LZEndpoint
 const chainIds: any = ChainIds
@@ -14,6 +20,9 @@ const environments: any = {
   mainnet: ['ethereum', 'bsc', 'avalanche', 'polygon', 'arbitrum', 'optimism', 'fantom'],
   testnet: ['rinkeby', 'bsc-testnet', 'fuji', 'mumbai', 'arbitrum-rinkeby', 'optimism-kovan', 'fantom-testnet']
 }
+
+
+export type ContractName = 'Omnix' | 'Omnix1155' | 'LayerZeroEndpoint' | 'OmnixExchange' | 'Strategy' | 'OFT'
 
 export const rpcProviders: { [key: number]: string } = {
   4: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
@@ -92,13 +101,19 @@ export const getChainIdFromName = (name: string): number => {
   return chain_list[name]
 }
 
-export const getAddressByName = (name: 'Omnix' | 'Omnix1155' | 'LayerZeroEndpoint', chainId: number) => {
+export const getAddressByName = (name: ContractName , chainId: number) => {
   if (name === 'Omnix') {
     return omnixBridge[chainInfos[chainId].name]
   } else if (name === 'Omnix1155') {
     return omnixBridge1155[chainInfos[chainId].name]
   } else if (name === 'LayerZeroEndpoint') {
     return lzEndpoint[chainInfos[chainId].name]
+  } else if (name === 'OmnixExchange') {
+    return omnixExchange[chainInfos[chainId].name]
+  } else if (name === 'Strategy') {
+    return strategy[chainInfos[chainId].name]
+  } else if (name === 'OFT') {
+    return oft[chainInfos[chainId].name]
   }
 }
 

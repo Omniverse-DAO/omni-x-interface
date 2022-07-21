@@ -21,8 +21,13 @@ const changeOrderStatus = async (hash: string, status: string) => {
     return res.data
 }
 
+const getNonce = async () => {
+    return 0
+}
+
 export const ordersService = {
     makeOrder,
     getOrders,
-    changeOrderStatus
+    changeOrderStatus,
+    getNonce
 }

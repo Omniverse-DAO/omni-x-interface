@@ -1,6 +1,7 @@
 import {ethers} from 'ethers'
 import {getAddressByName, getProvider, rpcProviders} from './constants'
 import OmnixBridgeABI from '../constants/abis/OmnixBridge.json'
+import OmnixExchangeABI from '../constants/abis/OmnixExchange.json'
 import OmnixBridge1155ABI from '../constants/abis/OmnixBridge1155.json'
 import ERC721ABI from '../constants/abis/ERC721.json'
 import ERC1155ABI from '../constants/abis/ERC1155.json'
@@ -79,4 +80,21 @@ export const validateContract = async (chainId: number, address: string): Promis
 
   // No code : "0x" then functionA is definitely not there
   return bytecode.length > 2
+}
+
+export const getOmnixExchangeInstance = (chainId: number, signer: any) => {
+  const address = getAddressByName('OmnixExchange', chainId)
+  if (signer === null) {
+    const provider = getProvider(chainId)
+    return new ethers.Contract(
+      address,
+      OmnixExchangeABI,
+      provider
+    )
+  }
+  return new ethers.Contract(
+    address,
+    OmnixExchangeABI,
+    signer
+  )
 }

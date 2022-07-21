@@ -13,12 +13,15 @@ import {
   getERC721Instance,
   getERC1155Instance,
   getOmnixBridge1155Instance,
-  getOmnixBridgeInstance, validateContract
+  getOmnixBridgeInstance, validateContract, getOmnixExchangeInstance
 } from '../utils/contracts'
 import {getAddressByName, getChainIdFromName, getLayerzeroChainId} from '../utils/constants'
 import ConfirmTransfer from './bridge/ConfirmTransfer'
 import ConfirmUnwrap from './bridge/ConfirmUnwrap'
 import {openSnackBar} from '../redux/reducers/snackBarReducer'
+import {IOrder, signOrder} from '../utils/order'
+import { ordersService } from '../services/orders'
+import { makeOrder } from '../redux/reducers/ordersReducer'
 
 interface RefObject {
   offsetHeight: number
@@ -241,6 +244,47 @@ const SideBar: React.FC = () => {
     }
 
     setConfirmTransfer(true)
+  }
+
+  const handleListing = async () => {
+    if (!selectedNFTItem) return
+    if (!targetChain) return
+    if (!user) return
+    if (!signer) return
+    if (!provider?._network?.chainId) return
+    if (provider?._network?.chainId === targetChain) return
+
+    const price = 0.1
+    const amount = 1
+    const nonce = await ordersService.getNonce()
+    const srcChainId = provider?._network?.chainId
+
+    const order: IOrder = {
+      isOrderAsk: true,
+      signer: await signer.getAddress(),
+      collection: selectedNFTItem.token_address,
+      price,
+      tokenId: selectedNFTItem.token_id,
+      amount,
+      strategy: getAddressByName('Strategy', srcChainId),
+      currency: getAddressByName('OFT', srcChainId),
+      nonce,
+      startTime: new Date().valueOf(),
+      endTime: new Date().valueOf(),
+      minPercentageToAsk: 900,
+      signature: '',
+      params: '',
+      srcChain: getLayerzeroChainId(srcChainId),
+      destChain: getLayerzeroChainId(targetChain)
+    }
+
+    await signOrder(order, signer)
+
+    dispatch(makeOrder(order) as any)
+  }
+
+  const handleBuy = async () => {
+    
   }
 
   const onTransfer = async () => {
@@ -737,6 +781,9 @@ const SideBar: React.FC = () => {
                 <button className="bg-g-400 text-white w-[172px] py-[10px] rounded-full m-auto" onClick={handleTransfer}>
                   Transfer
                 </button>
+                <button className="bg-g-400 text-white w-[172px] py-[10px] rounded-full m-auto" onClick={handleListing}>
+                  Listing
+                </button>
               </div>
             }
           </li>
@@ -755,7 +802,7 @@ const SideBar: React.FC = () => {
                 <div className="px-[113px] py-[43px] flex flex-col items-center border border-dashed border-g-300 bg-g-200">
                   <img src="/sidebar/attach.png" />
                 </div>
-                <button className="bg-gr-100 text-white w-[172px] py-[10px] rounded-full m-auto">
+                <button className="bg-gr-100 text-white w-[172px] py-[10px] rounded-full m-auto" onClick={handleBuy}>
                   Buy
                 </button>
               </div>
