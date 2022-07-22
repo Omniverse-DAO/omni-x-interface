@@ -4,10 +4,10 @@ import Image from 'next/image'
 import type { NextPage } from 'next'
 import { Listbox, Transition, Switch } from '@headlessui/react'
 
-import Discord from '../../../public/images/discord.png'
-import Twitter from '../../../public/images/twitter.png'
-import Web from '../../../public/images/web.png'
-import Ethereum from '../../../public/sidebar/ethereum.png'
+import Discord from '../../../static/images/discord.png'
+import Twitter from '../../../static/images/twitter.png'
+import Web from '../../../static/images/web.png'
+import Ethereum from '../../../static/sidebar/ethereum.png'
 
 import { getCollectionNFTs, selectCollectionNFTs, getCollectionInfo, selectCollectionInfo, clearCollectionNFTs, selectGetNFTs, getCollectionOwners, selectCollectionOwners } from '../../../redux/reducers/collectionsReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,6 +36,7 @@ import { info } from 'console'
 const sort_fields = [
   { id: 1, name: 'price: low to high', value: 'price', unavailable: false },
   { id: 2, name: 'price: high to low', value: '-price', unavailable: false },
+  { id: 3, name: 'Highest last sale',  value: 'price', unavailable: false},
 ]
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -266,20 +267,20 @@ const Collection: NextPage = () => {
                 </p>
               </div>
               <div className="xl:ml-20 lg:ml-10 md:ml-10">
-                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-normal underline">sales tax</p>
+                <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-normal underline">royalty fee</p>
                 <p className="text-[#1E1C21] font-['Roboto Mono'] text-xl font-bold mt-3">0%</p>
               </div>
             </div>
             <div className='mt-8'>
               <ul className="flex flex-wrap relative justify-item-stretch text-sm font-medium text-center text-gray-500">
-                <li className={`select-none inline-block border-x-2 border-t-2 border-zince-800 text-xl px-10 py-2 rounded-t-lg ${currentTab==='items'?'bg-slate-200 text-[#1E1C21]':'bg-slate-100'}`} onClick={()=>setCurrentTab('items')}>items</li>
-                <li className={`select-none inline-block border-x-2 border-t-2 border-zince-800 text-xl px-10 py-2 rounded-t-lg ${currentTab==='activity'?'bg-slate-200 text-[#1E1C21]':'bg-slate-100'}`} onClick={()=>setCurrentTab('activity')}>activity</li>
-                <li className={`select-none inline-block border-x-2 border-t-2 border-zince-800 text-xl px-10 py-2 rounded-t-lg ${currentTab==='stats'?'bg-slate-200 text-[#1E1C21]':'bg-slate-100'}`} onClick={()=>setCurrentTab('stats')}>stats</li>
+                <li className={`select-none inline-block border-x-2 border-t-2 border-zince-800 text-xl px-10 py-2 rounded-t-lg ${currentTab==='items'?'bg-[#E9ECEF] text-[#1E1C21]':'bg-[#F8F9FA] text-[#6C757D]'}`} onClick={()=>setCurrentTab('items')}>items</li>
+                <li className={`select-none inline-block border-x-2 border-t-2 border-zince-800 text-xl px-10 py-2 rounded-t-lg ${currentTab==='activity'?'bg-[#E9ECEF] text-[#1E1C21]':'bg-[#F8F9FA] text-[#6C757D]'}`} onClick={()=>setCurrentTab('activity')}>activity</li>
+                <li className={`select-none inline-block border-x-2 border-t-2 border-zince-800 text-xl px-10 py-2 rounded-t-lg ${currentTab==='stats'?'bg-[#E9ECEF] text-[#1E1C21]':'bg-[#F8F9FA] text-[#6C757D]'}`} onClick={()=>setCurrentTab('stats')}>stats</li>
               </ul>
             </div>
           </div>
           <div className="col-span-2">
-            <div className="mt-4"><button className="px-5 py-2 text-[#ADB5BD] font-['Roboto Mono'] text-lg border-2 border-[#ADB5BD] rounded-[22px]">+ watchlist</button></div>
+            {/* <div className="mt-4"><button className="px-5 py-2 text-[#ADB5BD] font-['Roboto Mono'] text-lg border-2 border-[#ADB5BD] rounded-[22px]">+ watchlist</button></div> */}
             <div className="mt-7">
               { collectionInfo&&collectionInfo.discord &&
                 <Link href={collectionInfo.discord}>
@@ -312,7 +313,7 @@ const Collection: NextPage = () => {
             <ul className='flex flex-col space-y-4'>
               <li className="w-full">
                 <div
-                  className={`w-full px-4 py-4 text-left text-g-600 hover:bg-p-700 hover:bg-opacity-20 font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
+                  className={`w-full px-4 py-4 text-left text-g-600  font-semibold hover:shadow-xl ${expandedMenu==1?'active':''}`}
                 >
                   Buy Now
                   <Switch
@@ -431,7 +432,8 @@ const Collection: NextPage = () => {
             </ul>
           </div>
           <div className="px-12 py-6 border-l-2 border-[#E9ECEF]">
-            <div className="flex flex-row-reverse gap-4">
+            <div className="flex flex-row-reverse gap-4 ">
+            {/* <div className="flex flex-row-reverse gap-4 grid 2xl:grid-cols-5 gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"> */}
               <div className="min-w-[180px] z-10">
                 <Listbox value={selected} onChange={onChangeSort}>
                   <div className="relative">
@@ -524,6 +526,7 @@ const Collection: NextPage = () => {
                 >
                   <div className="grid 2xl:grid-cols-5 gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
                     { nfts.map((item, index) => {
+                      console.log(item)
                       return (
                         <NFTBox nft={item} index={index} key={index} col_url={col_url} chain={collectionInfo?collectionInfo.chain:'eth'}/>
                       )

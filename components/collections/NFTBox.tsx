@@ -10,6 +10,7 @@ import USD from '../../public/images/USD.png'
 
 const NFTBox = ({nft, col_url, chain}: IPropsNFTItem) => {
   const [imageError, setImageError] = useState(false)
+  
 
   return (
     <div className="w-full">
@@ -51,7 +52,7 @@ const NFTBox = ({nft, col_url, chain}: IPropsNFTItem) => {
                 {chain === 'arbitrum' &&
                   <img src="/svgs/arbitrum.svg" className="w-[16px] h-[16px]" />
                 }
-                <span className="text-[#6C757D] text-sm mr-2">Chain : </span>
+                {/* <span className="text-[#6C757D] text-sm mr-2">Chain : </span> */}
               </div>
             </div>
           </div>

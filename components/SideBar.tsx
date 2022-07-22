@@ -49,6 +49,7 @@ const SideBar: React.FC = () => {
   const [expandedMenu, setExpandedMenu] = useState(0)
   const [fixed, setFixed] = useState(false)
   const [confirmTransfer, setConfirmTransfer] = useState(false)
+  const [chainId, setChainID] = useState(4)
 
   const menu_profile = useRef<HTMLUListElement>(null)
   const menu_ethereum = useRef<HTMLUListElement>(null)
@@ -178,6 +179,7 @@ const SideBar: React.FC = () => {
   const onClickNetwork = async (chainId: number) => {
     await connectWallet()
     await switchNetwork(chainId)
+    setChainID(chainId)
   }
 
   const handleTargetChainChange = (networkIndex: number) => {
@@ -441,7 +443,28 @@ const SideBar: React.FC = () => {
             </div>
             <div className="w-full py-[8px]">
               <div className="sidebar-icon">
-                <img src="/sidebar/ethereum.png" className="m-auto" />
+                {
+                  chainId === (env === 'testnet' ? 4 : 1) && <img src="/sidebar/ethereum.png" className="m-auto" />
+                }
+                {
+                  chainId === (env === 'testnet' ? 421611 : 1) && <img src="/sidebar/arbitrum.png" className="m-auto" />
+                }
+                {
+                  chainId === (env === 'testnet' ? 43113 : 1) && <img src="/sidebar/avax.png" className="m-auto" />
+                }
+                {
+                  chainId === (env === 'testnet' ? 97 : 1) && <img src="/sidebar/binance.png" className="m-auto" />
+                }
+                {
+                  chainId === (env === 'testnet' ? 4002 : 1) && <img src="/sidebar/fantom.png" className="m-auto" />
+                }
+                {
+                  chainId === (env === 'testnet' ? 69 : 1) && <img src="/sidebar/optimism.png" className="m-auto" />
+                }
+                {
+                  chainId === (env === 'testnet' ? 80001 : 1) && <img src="/sidebar/polygon.png" className="m-auto" />
+                }
+                
               </div>
             </div>
             <div className="w-full py-[8px]">
@@ -583,8 +606,12 @@ const SideBar: React.FC = () => {
             </button>
             { expandedMenu == 3 &&
               <div className='flex flex-col w-full space-y-4 p-6 pt-8 pb-0' ref={menu_wallets}>
-                <span className="font-semibold w-auto text-[16px]">Staking:</span>
-                <div className="w-full flex flex-row font-semibold text-[14px]">
+                <span className="font-semibold w-auto text-[16px]">OMNI balance:</span>
+                <span className="font-semibold w-auto text-[16px]">USDC balance:</span>
+                <span className="font-semibold w-auto text-[16px]">USDT balance:</span>
+
+                <span className="w-auto text-[16px]">Staking: comming soon</span>
+                {/* <div className="w-full flex flex-row font-semibold text-[14px]">
                   <div className="bg-g-200 w-[88px] px-[11px] py-[9px]">
                     APR
                     <span className="pull-right">50%</span>
@@ -656,7 +683,7 @@ const SideBar: React.FC = () => {
                 <div className="flex flex-row">
                   <span className="text-[14px]">*add/remove positions on profile dashboard</span>
                   <button className="w-[30px] h-[30px] bg-wallet-output"></button>
-                </div>
+                </div> */}
               </div>
             }
           </li>
@@ -673,9 +700,10 @@ const SideBar: React.FC = () => {
             { expandedMenu == 4 &&
               <div className='flex flex-col w-full space-y-4 p-6 pt-8 pb-0' ref={menu_watchlist}>
                 <div className="p-[51px] flex flex-col items-center border border-dashed border-g-300">
-                  <span className="text-[14px] text-g-300">Drag & Drop</span>
+                  {/* <span className="text-[14px] text-g-300">Drag & Drop</span>
                   <span className="text-[14px] text-g-300">an NFT or NFT Collection</span>
-                  <span className="text-[14px] text-g-300">to add your watch list</span>
+                  <span className="text-[14px] text-g-300">to add your watch list</span> */}
+                  <span className="text-[14px] text-g-300">comming soon</span>
                 </div>
               </div>
             }
