@@ -4,7 +4,7 @@ module.exports = {
     API_URL: 'https://omni-x-api.herokuapp.com/'
   },
   images: {
-    domains: ['localhost', 'omni-x-api.herokuapp.com'],
+    domains: ['localhost','omni-x.s3.amazonaws.com'],
     loader: 'akamai',
     path: ''
   }
