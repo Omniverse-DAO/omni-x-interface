@@ -79,7 +79,6 @@ const Item: NextPage = () => {
                       <h1 className="text-[#1E1C21] text-[20px] font-bold">owner:</h1>
                       <h1 className="text-[#B444F9] text-[20px] font-normal underline ml-4">BOOBA.ETH</h1>
                     </div>
-                      {/* <h1 className="text-[#1E1C21] text-[60px] font-normal">{nftInfo.price}</h1> */}
                     <div className="flex">
                       <h1 className="text-[#1E1C21] text-[60px] font-normal mr-28">69.5</h1>
                       <Image src={PngEther} alt="eth"/>
@@ -92,44 +91,44 @@ const Item: NextPage = () => {
                     </div>
                   </div>
                   <div className='pl-[58px] flex '>
-                      <div className='mr-[50px]'>
-                        <h2>account</h2>
-                        <p className='mt-[22px]'>0xdh3skfhn3...</p>
-                        <p className='mt-[22px]'>0xdh3skfhn3...</p>
-                        <p className='mt-[22px]'>0xdh3skfhn3...</p>
-                        <p className='mt-[22px]'>0xdh3skfhn3...</p>
+                    <div className='mr-[50px]'>
+                      <h2>account</h2>
+                      <p className='mt-[22px]'>0xdh3skfhn3...</p>
+                      <p className='mt-[22px]'>0xdh3skfhn3...</p>
+                      <p className='mt-[22px]'>0xdh3skfhn3...</p>
+                      <p className='mt-[22px]'>0xdh3skfhn3...</p>
+                    </div>
+                    <div  className='mr-[50px]'>
+                      <h2>chain</h2>
+                      <Image src={PngEther}  className='mt-[22px]'/>
+                      <Image src={PngEther}  className='mt-[22px]'/>
+                      <Image src={PngEther}  className='mt-[22px]'/>
+                      <Image src={PngEther}  className='mt-[22px]'/>
+                    </div>                      
+                    <div>
+                      <h2>bid</h2>
+                      <div className='flex mt-[22px]'>
+                        <Image src={PngEther}/>
+                        <span>45,700.00</span>
+                        <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
                       </div>
-                      <div  className='mr-[50px]'>
-                        <h2>chain</h2>
-                        <Image src={PngEther}  className='mt-[22px]'/>
-                        <Image src={PngEther}  className='mt-[22px]'/>
-                        <Image src={PngEther}  className='mt-[22px]'/>
-                        <Image src={PngEther}  className='mt-[22px]'/>
-                      </div>                      
-                      <div>
-                        <h2>bid</h2>
-                        <div className='flex mt-[22px]'>
-                          <Image src={PngEther}/>
-                          <span>45,700.00</span>
-                          <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
-                        </div>
-                        <div className='flex mt-[22px]'>
-                          <Image src={PngEther}/>
-                          <span>45,700.00</span>
-                          <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
-                        </div>
-                        <div className='flex mt-[22px]'>
-                          <Image src={PngEther}/>
-                          <span>45,700.00</span>
-                          <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
-                        </div>
-                        <div className='flex mt-[22px]'>
-                          <Image src={PngEther}/>
-                          <span>45,700.00</span>
-                          <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
-                        </div>
-                        
+                      <div className='flex mt-[22px]'>
+                        <Image src={PngEther}/>
+                        <span>45,700.00</span>
+                        <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
                       </div>
+                      <div className='flex mt-[22px]'>
+                        <Image src={PngEther}/>
+                        <span>45,700.00</span>
+                        <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
+                      </div>
+                      <div className='flex mt-[22px]'>
+                        <Image src={PngEther}/>
+                        <span>45,700.00</span>
+                        <button className='bg-[#ADB5BD] round-[4px] px-10 py-1 ml-[32px]'>accept</button>
+                      </div>
+                      
+                    </div>
                   </div>
                 </div>
               </div>

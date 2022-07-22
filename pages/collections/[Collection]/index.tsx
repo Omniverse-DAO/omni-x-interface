@@ -433,7 +433,6 @@ const Collection: NextPage = () => {
           </div>
           <div className="px-12 py-6 border-l-2 border-[#E9ECEF]">
             <div className="flex flex-row-reverse gap-4 ">
-            {/* <div className="flex flex-row-reverse gap-4 grid 2xl:grid-cols-5 gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"> */}
               <div className="min-w-[180px] z-10">
                 <Listbox value={selected} onChange={onChangeSort}>
                   <div className="relative">
